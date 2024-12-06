@@ -1,0 +1,185 @@
+#nuestros-productos {
+    background-color: var(--color-cuarto);
+    color: white;
+    text-align: center;
+    border-radius: 20px;
+}
+
+#nuestros-productos .container {
+    padding: 100px 12px;
+}
+
+#nuestros-productos h2 {
+    margin-top: 0;
+    font-size: 3.2em;
+}
+
+#nuestros-productos p {
+    display: none;
+}
+
+#nuestros-productos .carta {
+    background-position: center center;
+    background-size: cover;
+    padding: 50px;
+    margin: 20px;
+    border-radius: 15px;
+}
+
+.carta:first-child {
+    background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ), url(media/lechonaLittle.jpg);
+}
+
+.carta:nth-child(2) {
+    background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ), url(media/cojin30.jpg);
+}
+
+.carta:nth-child(3) {
+    background-image: linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5),
+      rgba(0, 0, 0, 0.5)
+    ), url(media/pernil.jpg);
+}
+
+#ventana-emergente {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    z-index: 9999;
+}
+
+#contenido-ventana {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    margin: 100px auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border: 2px solid black;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 30px;
+}
+
+#contenido-ventana h3,
+#contenido-ventana p {
+  color: white;
+}
+
+#cerrar-ventana {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #ff0000;
+    color: white;
+    padding: 5px;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+#cerrar-ventana:hover {
+    background-color: #cc0000;
+}
+
+#whatsapp-button {
+    display: block;
+    margin-top: 20px;
+}
+
+@media(min-width:720px){
+    #nuestros-productos{
+        box-shadow: 2px 2px 10px rgb(42, 42, 42);
+        height: 1000px;
+        padding-top: 100px;
+    }
+
+    #nuestros-productos .programas{
+        display: flex;
+        justify-content: center;
+    }
+
+    #nuestros-productos p{
+        display: block;
+        padding-top: 20px;
+        margin-bottom: 40px;
+    }
+
+    #nuestros-productos h2{
+        font-size: 3em;
+    }
+
+    #nuestros-productos h3{
+        margin-top: 0;
+    }
+
+    #nuestros-productos .carta{
+        padding: 3vw;
+        background-size: 100% 110px;
+        background-repeat: no-repeat;
+        background-position-y: 0;
+        background-color: rgba(50,50,50,0.5);
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        width: 50%; /* Define el ancho del recuadro */
+    }
+
+   
+
+    #nuestros-productos .carta button{
+        display: none;
+    }
+
+
+    .carta:first-child{
+        background-image:linear-gradient(
+            0deg,
+            rgba(0,0,0,0.5),
+            rgba(0,0,0,0.5)
+            ) 
+            ,url(media/fotoDeLechona.jpg);
+    }
+    
+    .carta:nth-child(2){
+        background-image:linear-gradient(
+            0deg,
+            rgba(0,0,0,0.5),
+            rgba(0,0,0,0.5)
+            ) 
+            ,url(media/cojin302.jpg);
+    }
+    
+    .carta:nth-child(3){
+        background-image:linear-gradient(
+            0deg,
+            rgba(0,0,0,0.5),
+            rgba(0,0,0,0.5)
+            ) 
+            ,url(media/pernil2.jpg);
+    }
+}
+
+@media (min-width:1200px){
+    #nuestros-productos{
+        margin-left: 5vw;
+        margin-right: 5vw;
+    }
+}

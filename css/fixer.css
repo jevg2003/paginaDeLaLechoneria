@@ -1,0 +1,24 @@
+.fixer {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--color-sexta);
+    padding: 10px;
+    box-sizing: border-box;
+    transition: opacity 0.3s ease;
+    border-top-right-radius: 4px;
+    box-shadow: 2px 2px 10px var(--color-novena);
+    z-index: 2;
+}
+
+.fixer.hidden {
+    opacity: 0;
+    pointer-events: none; /* Deshabilitamos los eventos del mouse */
+}
+
+.fixer p {
+    display: inline-block;
+    margin: 0;
+    padding: 5px;
+    font-size: 1.1em;
+}
+

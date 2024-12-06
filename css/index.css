@@ -1,0 +1,272 @@
+:root {
+    --color-principal: #004aad;
+    --color-secundario: #003a8d;
+    --color-terciario: #002a6d;
+    --color-cuarto: #001a4d;
+    --color-quinto: #000a2d;
+    --color-sexta: rgb(240, 240, 240);
+    --color-septima: rgb(205, 205, 205);
+    --color-octava: rgba(0, 0, 0, 0.1);
+    --color-novena: rgb(36, 36, 36);
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    background-image:linear-gradient(
+        0deg,
+        rgba(0,0,0,0.5),
+        rgba(0,0,0,0.5)
+        ) 
+        ,url(media/cajas.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+* {
+    box-sizing: border-box;
+    border: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+h1 { font-size: 3.5em; }
+h2 { font-size: 2.7em; }
+h3 { font-size: 2em; }
+p { font-size: 1.4em; }
+ul { list-style: none; }
+li { font-size: 1.25em; }
+
+button {
+    font-size: 1.25em;
+    font-weight: bold;
+    padding: 10px 30px;
+    border-radius: 5px;
+    border: 1px solid var(--color-novena);
+    box-shadow: 2px 2px 10px var(--color-novena);
+    color: white;
+    background-color: var(--color-secundario);
+    margin: 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--color-terciario);
+}
+
+.container {
+    max-width: 1650px;
+    margin: auto;
+}
+
+.color-black { color: black; }
+.color-acento { color: var(--color-tercero); }
+.color-minititu { color: var(--color-cuarto); }
+.color-obligatorio { color: red; }
+
+/* #mensaje{
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 0;
+    border-bottom: solid 0.5px rgb(205, 205, 205);
+    box-shadow: 2px 7px 10px rgba(0, 0, 0, 0.1);
+    z-index: 0;
+}
+
+#mensaje button,
+a,
+input,
+textarea {
+  outline: none;
+}
+
+#mensaje .video-fondo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    border: 0;
+    background-position: center center;
+}
+
+.video-fondo video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 0;
+}
+
+#mensaje .container{
+    background-color: rgba(0, 0, 0, 0.50);
+    margin-top: 120px;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 120px;
+    border-radius: 20px;
+    z-index: 1;
+    box-shadow: 2px 2px 10px black;
+}
+
+#mensaje .container-mensaje{
+    margin: 0;
+    margin-bottom: 15px
+}
+
+#mensaje .container h2{
+    color: white;
+    margin-top: 60px;
+    margin-bottom: 0;
+    font-size: 10vw;
+    padding: 10px;
+}
+
+#mensaje .container img{
+    width: 45px;
+    margin-top: 10px;
+    margin-left: 15px;
+    margin-right: 15px;
+
+}
+
+#mensaje .container .container-mensaje a{
+    text-decoration: none;
+}
+
+#mensaje .container .myForm{
+    background-color: #d8c087;
+    color: white;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 20px;
+}
+.myForm label{
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+
+}
+
+.myForm input {
+    width: 90%;
+    padding: 5px;
+    margin-top: 5px;
+    border: 0;
+    border-bottom: 1px solid black;
+    border-radius: 3px;
+    font-size: 1.2em;
+}
+
+.myForm textarea{
+    width: 90%;
+    padding: 5px;
+    margin-top: 5px;
+    height: 200px;
+    border: 0;
+    border-radius: 10px;
+    border: 1px solid grey;
+    font-size: 1.4em;
+    resize: none;
+}
+
+.myForm button {
+    margin-top: 10px;
+} */
+
+.whatsapp-icon {
+    position: fixed;
+    right: 20px; /* Ajusta la posición horizontal según tu preferencia */
+    bottom: 55px; /* Ajusta la posición vertical según tu preferencia */
+    z-index: 9999; /* Asegura que el ícono esté por encima de otros elementos */
+    background-color: #40C351; /* Personaliza el color de fondo según tu preferencia */
+    color: var(--color-sexta); /* Personaliza el color del ícono según tu preferencia */
+    border-radius: 50%; /* Aplica un borde redondeado al ícono */
+    width: 60px; /* Ajusta el tamaño del ícono según tu preferencia */
+    height: 60px; /* Ajusta el tamaño del ícono según tu preferencia */
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Agrega sombra según tu preferencia */
+  }
+
+  .whatsapp-icon i {
+    font-size: 24px; /* Ajusta el tamaño del ícono según tu preferencia */
+    }
+  .whatsapp-icon:hover {
+    background-color: #19cb31; /* Cambia el color de fondo cuando se pasa el cursor */
+  }
+
+  .hidden{
+    transform: scale(0.8);
+    opacity: 0;
+    transition: all 1.1s ease-out;
+  }
+
+  .mostrar{
+    transform: scale(1);
+    opacity: 1;
+  }
+
+@media(min-width:720px){
+    /* #mensaje{
+        margin-top: 10px;
+    }
+
+    #mensaje .container{
+        display: flex;
+        flex-direction: row;
+        align-items:center;
+        justify-content: space-between;
+    }
+
+    #mensaje .container-mensaje{
+        width: 40vw;
+    }
+
+    #mensaje .myForm{
+        width:100%;
+        border-radius:20px;
+    }
+    
+    #mensaje .container-mensaje h2{
+        font-size: 2.4em;
+    } */
+
+}
+
+/* @media (min-width:1230px){
+    #final .realiza-pedido{
+        padding: 100px;
+        height: 100%;
+        margin: 90px 400px;
+    }
+} */
+/* @media (min-width:1430px){
+    #final .realiza-pedido{
+        padding: 100px;
+        height: 100%;
+        margin: 90px 500px;
+    }
+} */
+
+
+
+
+  

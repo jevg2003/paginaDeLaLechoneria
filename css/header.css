@@ -1,0 +1,141 @@
+header {
+    background-color: var(--color-principal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 2px 7px 10px var(--color-octava);
+    z-index: 80;
+}
+
+header .container {
+    display: flex;
+    flex-direction: row;
+    align-items:center;
+    justify-content: space-between;
+    margin-right: 60px;
+    width: 100%; /* Ajustar el ancho del contenedor al 100% */
+    max-width: 800px;
+}
+
+header .img-container {
+    margin: 0;
+    padding: 25px 30px;
+    float: left;
+    background-image: url(media/logo.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 6em;
+    width: 6em;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: filter 0.8s ease;
+    padding: 10px;
+}
+
+header .img-container:hover {
+    filter: brightness(70%);
+}
+
+header .custom-select {
+    float: right;
+}
+
+header .custom-select .select-img {
+    display: inline-block;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    color: var(--color-cuarto); 
+    font-size: 2em;
+    outline: none; /* Elimina el recuadro azul de selección */
+    -webkit-tap-highlight-color: transparent; /* Elimina el resaltado de tap en dispositivos móviles */
+}
+
+header .custom-select .select-img:active {
+    color: var(--color-quinto); /* Oscurece el icono cuando se presiona */
+}
+
+
+header .custom-select .dropdown {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fff;
+    border: 1px solid var(--color-septima);
+    border-radius: 5px;
+    box-shadow: 0 2px 4px var(--color-octava);
+    right: 0;
+}
+
+header .custom-select .dropdown li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+header .custom-select .dropdown li:hover {
+    background-color: #e0e0e0;
+}
+
+header a {
+    display: none;
+    padding: 5px 12px;
+    text-decoration: none;
+    font-weight: bold;
+    color: black;
+}
+
+header a:hover {
+    color: var(--color-cuarto);
+}
+
+@media(min-width:720px){
+    header{
+        position: fixed;
+        width: 100%;
+    }
+    
+    header .container {
+        margin: 0;
+
+        display: flex;
+        justify-content: space-between;
+        max-width: 100%;
+      }
+
+    header .container .img-container{
+        flex-grow: 1;
+        margin-right: 10px;
+        padding: 20px;
+
+    }
+        
+
+    header .custom-select{
+        display: none;
+    }
+
+    header .container nav{
+        flex-grow: 1;
+        margin-left: 10px; /* Ajusta el margen según la distancia deseada */
+        padding: 20px;
+        padding-bottom: 0;
+        padding-left: 20px;
+    }
+
+    header nav .busquedas{
+        display: flex;
+        flex-direction: row;
+        padding-bottom: 0;
+        text-align: center;
+    }
+    header a{
+        display: flex;
+        color: var(--color-sexta);
+    }
+
+}
