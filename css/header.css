@@ -22,7 +22,7 @@ header .img-container {
     margin: 0;
     padding: 25px 30px;
     float: left;
-    background-image: url(media/logo.png);
+    background-image: url(media/logo.webp);
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
