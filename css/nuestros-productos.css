@@ -31,7 +31,7 @@
       0deg,
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
-    ), url(media/lechonaLittle.jpg);
+    ), url(media/lechonaLittle.webp);
 }
 
 .carta:nth-child(2) {
@@ -39,7 +39,7 @@
       0deg,
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
-    ), url(media/cojin30.jpg);
+    ), url(media/cojin30.webp);
 }
 
 .carta:nth-child(3) {
@@ -47,7 +47,7 @@
       0deg,
       rgba(0, 0, 0, 0.5),
       rgba(0, 0, 0, 0.5)
-    ), url(media/pernil.jpg);
+    ), url(media/pernil.webp);
 }
 
 #ventana-emergente {
@@ -155,7 +155,7 @@
             rgba(0,0,0,0.5),
             rgba(0,0,0,0.5)
             ) 
-            ,url(media/fotoDeLechona.jpg);
+            ,url(media/fotoDeLechona.webp);
     }
     
     .carta:nth-child(2){
@@ -164,7 +164,7 @@
             rgba(0,0,0,0.5),
             rgba(0,0,0,0.5)
             ) 
-            ,url(media/cojin302.jpg);
+            ,url(media/cojin302.webp);
     }
     
     .carta:nth-child(3){
@@ -173,7 +173,7 @@
             rgba(0,0,0,0.5),
             rgba(0,0,0,0.5)
             ) 
-            ,url(media/pernil2.jpg);
+            ,url(media/pernil2.webp);
     }
 }
 
