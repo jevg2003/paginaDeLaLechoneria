@@ -1,67 +1,311 @@
 ---
-import ProductModal from './ProductModal';
+import { PHONE_E164 } from '../lib/contact';
+
+const waNumber = PHONE_E164.replace('+', '');
 
 const products = [
 	{
-		title: 'Lechonas',
-		description:
-			'La lechona en Cali se hace con una cabeza de cerdo, arroz y arvejas. Se marina la carne con especias, se prepara un relleno con arvejas y arroz, y se rellena el cerdo. Se hornea hasta que esté crujiente. Se sirve con arepa.',
+		id: 'lechona-careta',
+		name: 'Lechona con Careta',
 		image: '/media/lechonaBig.webp',
+		info: 'Lechona tradicional tolimense con su careta y cuero súper crocante. Disponible desde 15 porciones, acompañada de arepas.',
+		message: 'Hola! Me interesa la Lechona con Careta. ¿Podrían darme más información y cotización?',
 	},
 	{
-		title: 'Cojines',
-		description:
-			'El cojín es muy similar a la lechona, pero se prepara sin la cabeza de cerdo. Se marina la carne con especias, se prepara un relleno con arvejas y arroz, y se rellena el cerdo. Se hornea hasta que esté crujiente. Se sirve con arepa.',
+		id: 'cojin-lechona',
+		name: 'Cojín de Lechona',
 		image: '/media/cojin30.webp',
+		info: 'Nuestro clásico cojín relleno de arroz, arveja y carne de cerdo, horneado hasta quedar crocante. Desde 15 porciones.',
+		message: 'Hola! Me interesa el Cojín de Lechona. ¿Podrían darme más información y cotización?',
 	},
 	{
-		title: 'Perniles',
-		description:
-			'El pernil es la pata trasera del cerdo que se marina con especias, se asa hasta que esté crujiente y se sirve como plato principal.',
+		id: 'cajas-por-mayor',
+		name: 'Cajas de Lechona al Por Mayor',
+		image: '/media/pedidos-empacados-domicilio.jpg',
+		info: 'Pedidos grandes de cajas de lechona para fiestas, reuniones y eventos. Te las entregamos empacadas y listas para repartir.',
+		message: 'Hola! Me interesan las Cajas de Lechona al Por Mayor para un evento. ¿Podrían darme más información y cotización?',
+	},
+	{
+		id: 'cajas-detal',
+		name: 'Cajas de Lechona al Detal',
+		image: '/media/racion-lechona-detalle.jpg',
+		info: 'Raciones individuales en caja con arepa y cuero, listas para servir. Ventas al detal aquí en nuestro local.',
+		message: 'Hola! Me interesa una Caja de Lechona al Detal. ¿Podrían darme más información?',
+	},
+	{
+		id: 'caja-mixta',
+		name: 'Caja de Lechona Mixta',
+		image: '/media/img/img4.webp',
+		info: 'Caja individual de nuestra lechona mixta: cabanos, pollo, costilla ahumada y cerdo en una sola ración.',
+		message: 'Hola! Me interesa la Caja de Lechona Mixta. ¿Podrían darme más información y cotización?',
+	},
+	{
+		id: 'tamales',
+		name: 'Tamales',
+		image: '/media/img/img5.webp',
+		info: 'Tamales vallunos y tolimenses hechos en casa, envueltos en hoja de plátano con la sazón de siempre.',
+		message: 'Hola! Me interesan los Tamales. ¿Podrían darme más información y cotización?',
+	},
+	{
+		id: 'lechona-mixta',
+		name: 'Lechona Mixta',
+		image: '/media/img/img10.jpg',
+		info: 'Lechona especial con cabanos, pollo, costilla ahumada y cerdo — todos los sabores de la casa en una sola.',
+		message: 'Hola! Me interesa la Lechona Mixta. ¿Podrían darme más información y cotización?',
+	},
+	{
+		id: 'pernil',
+		name: 'Pernil',
 		image: '/media/pernil-glaseado-1.jpg',
+		info: 'Pernil de cerdo asado, marinado con las especias de la casa y horneado hasta quedar jugoso por dentro y dorado por fuera.',
+		message: 'Hola! Me interesa el Pernil. ¿Podrían darme más información y cotización?',
+	},
+	{
+		id: 'lomo',
+		name: 'Lomo',
+		image: '/media/pernil.webp',
+		info: 'Lomo de cerdo horneado con glaseado de la casa, tierno y lleno de sabor. Perfecto como plato principal.',
+		message: 'Hola! Me interesa el Lomo. ¿Podrían darme más información y cotización?',
 	},
 ];
 ---
 
 <section id="nuestros-productos" class="py-16 sm:py-20 bg-cream-50">
-	<div class="mx-auto max-w-6xl px-4">
-		<h2 class="text-3xl sm:text-4xl font-extrabold text-brand-800 text-center mb-12">¡Nuestros Productos!</h2>
-		<div class="productos-reveal">
-			<ProductModal client:load products={products} />
+	<div class="w-full px-4 sm:px-8">
+		<span class="eyebrow-label">El menú de la casa</span>
+		<h2 class="editorial-heading mb-2">¡Nuestros Productos!</h2>
+		<p class="mb-10 text-lg font-semibold text-brand-600">
+			Toca cada foto para conocer el producto y pedir tu cotización 👇
+		</p>
+
+		<div class="productos-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
+			{
+				products.map((p) => (
+					<button
+						type="button"
+						class="producto-card group relative aspect-square cursor-pointer overflow-hidden rounded-2xl shadow-lg outline-offset-4 transition-shadow hover:shadow-2xl"
+						data-product={p.id}
+						aria-label={`Ver ${p.name}`}
+					>
+						<img src={p.image} alt={p.name} loading="lazy" class="producto-img h-full w-full object-cover transition-transform duration-500 group-hover:scale-110" data-flip-id={p.id} />
+						<span class="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-brand-900/90 to-transparent px-4 pb-3 pt-10">
+							<span class="text-left text-base font-extrabold text-cream-50 sm:text-lg">{p.name}</span>
+							<span class="producto-hint flex size-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-lg font-black text-brand-900">+</span>
+						</span>
+					</button>
+				))
+			}
 		</div>
 	</div>
 </section>
 
+<div
+	id="producto-modal"
+	class="fixed inset-0 z-[60] hidden items-center justify-center bg-brand-900/80 p-4 backdrop-blur-sm"
+	role="dialog"
+	aria-modal="true"
+	aria-labelledby="producto-modal-title"
+>
+	<div class="producto-modal-box relative w-full max-w-3xl overflow-hidden rounded-3xl bg-cream-50 shadow-2xl">
+		<button
+			id="producto-modal-close"
+			type="button"
+			aria-label="Cerrar"
+			class="absolute right-4 top-4 z-10 flex size-10 items-center justify-center rounded-full bg-brand-900/70 text-xl font-bold text-cream-50 transition-colors hover:bg-brand-900"
+		>
+			×
+		</button>
+		<div class="producto-modal-media h-64 w-full sm:h-80"></div>
+		<div class="p-6 sm:p-8">
+			<h3 id="producto-modal-title" class="text-2xl font-extrabold text-brand-800 sm:text-3xl"></h3>
+			<p class="producto-modal-info mt-3 leading-relaxed text-brand-900/80"></p>
+			<a
+				class="producto-modal-cta mt-6 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-4 text-lg font-bold text-brand-900 shadow-lg transition-transform hover:scale-105 hover:bg-gold-600"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" class="size-6">
+					<path d="M16.004 3C9.377 3 4 8.377 4 15.004c0 2.523.703 4.883 1.921 6.898L4 29l7.264-1.9a11.94 11.94 0 0 0 4.74.973h.001c6.626 0 12.003-5.377 12.003-12.004C28.008 8.377 22.63 3 16.004 3Z" />
+				</svg>
+				Cotizar
+			</a>
+		</div>
+	</div>
+</div>
+
+<script define:vars={{ waNumber }}>
+	window.__waNumber = waNumber;
+</script>
+
 <script>
 	import gsap from 'gsap';
-	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { Flip } from 'gsap/Flip';
 
-	gsap.registerPlugin(ScrollTrigger);
+	gsap.registerPlugin(Flip);
 
-	const mm = gsap.matchMedia();
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
-		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+	const modal = document.getElementById('producto-modal')!;
+	const modalBox = modal.querySelector<HTMLElement>('.producto-modal-box')!;
+	const media = modal.querySelector<HTMLElement>('.producto-modal-media')!;
+	const title = document.getElementById('producto-modal-title')!;
+	const info = modal.querySelector<HTMLElement>('.producto-modal-info')!;
+	const cta = modal.querySelector<HTMLAnchorElement>('.producto-modal-cta')!;
+	const closeBtn = document.getElementById('producto-modal-close')!;
 
-		// Animate the Astro-owned wrapper, never the React-rendered cards:
-		// GSAP inline styles on the island's DOM before hydration trigger
-		// React hydration-mismatch warnings.
-		gsap.fromTo(
-			'.productos-reveal',
-			{ autoAlpha: reduceMotion ? 1 : 0, y: reduceMotion ? 0 : 50 },
-			{
-				autoAlpha: 1,
-				y: 0,
-				duration: reduceMotion ? 0.3 : 0.8,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: '#nuestros-productos',
-					start: 'top 80%',
-					toggleActions: 'play none none reverse',
-				},
-			}
-		);
-
-		return () => {};
+	const productData: Record<string, { name: string; info: string; message: string }> = {};
+	document.querySelectorAll<HTMLElement>('.producto-card').forEach((card) => {
+		productData[card.dataset.product!] = {
+			name: card.getAttribute('aria-label')!.replace('Ver ', ''),
+			info: '',
+			message: '',
+		};
 	});
+
+	const details: Record<string, { info: string; message: string }> = {
+		'lechona-careta': {
+			info: 'Lechona tradicional tolimense con su careta y cuero súper crocante. Disponible desde 15 porciones, acompañada de arepas.',
+			message: 'Hola! Me interesa la Lechona con Careta. ¿Podrían darme más información y cotización?',
+		},
+		'cojin-lechona': {
+			info: 'Nuestro clásico cojín relleno de arroz, arveja y carne de cerdo, horneado hasta quedar crocante. Desde 15 porciones.',
+			message: 'Hola! Me interesa el Cojín de Lechona. ¿Podrían darme más información y cotización?',
+		},
+		'cajas-por-mayor': {
+			info: 'Pedidos grandes de cajas de lechona para fiestas, reuniones y eventos. Te las entregamos empacadas y listas para repartir.',
+			message: 'Hola! Me interesan las Cajas de Lechona al Por Mayor para un evento. ¿Podrían darme más información y cotización?',
+		},
+		'cajas-detal': {
+			info: 'Raciones individuales en caja con arepa y cuero, listas para servir. Ventas al detal aquí en nuestro local.',
+			message: 'Hola! Me interesa una Caja de Lechona al Detal. ¿Podrían darme más información?',
+		},
+		'caja-mixta': {
+			info: 'Caja individual de nuestra lechona mixta: cabanos, pollo, costilla ahumada y cerdo en una sola ración.',
+			message: 'Hola! Me interesa la Caja de Lechona Mixta. ¿Podrían darme más información y cotización?',
+		},
+		tamales: {
+			info: 'Tamales vallunos y tolimenses hechos en casa, envueltos en hoja de plátano con la sazón de siempre.',
+			message: 'Hola! Me interesan los Tamales. ¿Podrían darme más información y cotización?',
+		},
+		'lechona-mixta': {
+			info: 'Lechona especial con cabanos, pollo, costilla ahumada y cerdo — todos los sabores de la casa en una sola.',
+			message: 'Hola! Me interesa la Lechona Mixta. ¿Podrían darme más información y cotización?',
+		},
+		pernil: {
+			info: 'Pernil de cerdo asado, marinado con las especias de la casa y horneado hasta quedar jugoso por dentro y dorado por fuera.',
+			message: 'Hola! Me interesa el Pernil. ¿Podrían darme más información y cotización?',
+		},
+		lomo: {
+			info: 'Lomo de cerdo horneado con glaseado de la casa, tierno y lleno de sabor. Perfecto como plato principal.',
+			message: 'Hola! Me interesa el Lomo. ¿Podrían darme más información y cotización?',
+		},
+	};
+
+	let sourceCard: HTMLElement | null = null;
+	let movedImg: HTMLImageElement | null = null;
+
+	function openModal(card: HTMLElement) {
+		const id = card.dataset.product!;
+		const img = card.querySelector<HTMLImageElement>('.producto-img')!;
+		const d = details[id];
+		if (!d) return;
+
+		sourceCard = card;
+		movedImg = img;
+
+		title.textContent = productData[id].name;
+		info.textContent = d.info;
+		cta.href = `https://wa.me/${(window as any).__waNumber}?text=${encodeURIComponent(d.message)}`;
+
+		const contentEls = modalBox.querySelectorAll('h3, .producto-modal-info, .producto-modal-cta');
+		const flipDur = reduceMotion ? 0.15 : 0.6;
+
+		// One connected sequence: backdrop fades in while the image flies,
+		// and the text only appears once the image has landed.
+		gsap.set(contentEls, { autoAlpha: 0, y: reduceMotion ? 0 : 20 });
+		modal.classList.remove('hidden');
+		modal.classList.add('flex');
+		gsap.fromTo(modal, { autoAlpha: 0 }, { autoAlpha: 1, duration: reduceMotion ? 0.1 : 0.3 });
+
+		const state = Flip.getState(img);
+		media.appendChild(img);
+		img.classList.add('h-full', 'w-full', 'object-cover');
+
+		Flip.from(state, {
+			duration: flipDur,
+			ease: reduceMotion ? 'none' : 'power2.inOut',
+			absolute: true,
+			onComplete: () => {
+				gsap.to(contentEls, {
+					autoAlpha: 1,
+					y: 0,
+					duration: reduceMotion ? 0.15 : 0.4,
+					stagger: reduceMotion ? 0 : 0.08,
+				});
+			},
+		});
+
+		closeBtn.focus();
+		document.addEventListener('keydown', onKeydown);
+	}
+
+	function closeModal() {
+		if (!sourceCard || !movedImg) return;
+
+		const card = sourceCard;
+		const img = movedImg;
+		sourceCard = null;
+		movedImg = null;
+		document.removeEventListener('keydown', onKeydown);
+
+		const contentEls = modalBox.querySelectorAll('h3, .producto-modal-info, .producto-modal-cta');
+		const flipDur = reduceMotion ? 0.1 : 0.5;
+
+		// Reverse choreography: text tucks away first, then the image flies
+		// home while the backdrop fades out with it — nothing lingers.
+		gsap.to(contentEls, { autoAlpha: 0, y: reduceMotion ? 0 : 10, duration: reduceMotion ? 0.08 : 0.18 });
+
+		gsap.delayedCall(reduceMotion ? 0.05 : 0.15, () => {
+			const state = Flip.getState(img);
+			card.insertBefore(img, card.firstChild);
+
+			Flip.from(state, {
+				duration: flipDur,
+				ease: reduceMotion ? 'none' : 'power2.inOut',
+				absolute: true,
+				onComplete: () => {
+					modal.classList.add('hidden');
+					modal.classList.remove('flex');
+					card.focus();
+				},
+			});
+
+			gsap.to(modal, { autoAlpha: 0, duration: flipDur, ease: 'power1.in' });
+		});
+	}
+
+	function onKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape') closeModal();
+	}
+
+	document.querySelectorAll<HTMLElement>('.producto-card').forEach((card) => {
+		card.addEventListener('click', () => openModal(card));
+	});
+
+	closeBtn.addEventListener('click', closeModal);
+	modal.addEventListener('click', (e) => {
+		if (e.target === modal) closeModal();
+	});
+
+	// Pulsing "+" hint so it's obvious the cards are pressable.
+	if (!reduceMotion) {
+		gsap.to('.producto-hint', {
+			scale: 1.2,
+			duration: 0.8,
+			yoyo: true,
+			repeat: -1,
+			ease: 'sine.inOut',
+			stagger: 0.15,
+		});
+	}
 </script>

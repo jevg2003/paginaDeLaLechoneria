@@ -10,5 +10,10 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  integrations: [react()]
+  integrations: [react()],
+
+  // Disable dev toolbar to prevent SendBeforeConnectError HMR race condition
+  devToolbar: {
+    enabled: false
+  }
 });

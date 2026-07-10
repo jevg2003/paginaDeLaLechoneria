@@ -1,104 +1,120 @@
 ---
-const steps = [
-	{
-		image: '/media/raciones-lechona-cocina.jpg',
-		text: 'Preparamos cada ración con dedicación',
-	},
-	{
-		image: '/media/racion-lechona-detalle.jpg',
-		text: 'Servida con cuero crocante y sazón exacta',
-	},
-	{
-		image: '/media/pedidos-empacados-domicilio.jpg',
-		text: 'Empacada y lista para tu domicilio',
-	},
+const tiles = [
+	{ src: '/media/img/img1.webp', alt: 'Lechona entera con cuero crocante', class: 'col-span-2' },
+	{ src: '/media/img/img2.webp', alt: 'Preparación de lechona', class: '' },
+	{ src: '/media/img/img3.webp', alt: 'Lechona lista para servir', class: '' },
+	{ src: '/media/img/img4.webp', alt: 'Raciones de lechona', class: '' },
+	{ src: '/media/img/img10.jpg', alt: 'Lechona servida, Chancho el Lechón', class: 'col-span-2 proceso-tile-center' },
+	{ src: '/media/img/img5.webp', alt: 'Cuero crocante de lechona', class: '' },
+	{ src: '/media/img/img6.webp', alt: 'Lechona al detalle', class: '' },
+	{ src: '/media/img/img7.webp', alt: 'Porciones de lechona', class: '' },
+	{ src: '/media/img/img8.webp', alt: 'Lechona tradicional caleña', class: '' },
+	{ src: '/media/img/img9.webp', alt: 'Sabor de la casa', class: '' },
 ];
 ---
 
-<section id="proceso" class="proceso-section relative bg-brand-900 text-cream-50">
-	<div class="proceso-pin relative h-screen overflow-hidden flex items-center justify-center">
-		<h2 class="proceso-heading absolute top-10 left-1/2 -translate-x-1/2 text-2xl sm:text-3xl font-extrabold text-center px-4">
-			De la Cocina a tu Domicilio
-		</h2>
+<section id="proceso" class="proceso-section relative overflow-hidden bg-brand-900 text-cream-50">
+	<div class="proceso-pin relative h-screen overflow-hidden">
+		<div class="proceso-grid grid h-full w-full grid-cols-4 grid-rows-3 gap-3 p-3 will-change-transform">
+			{
+				tiles.map((tile) => (
+					<figure class={`proceso-tile relative overflow-hidden rounded-2xl ${tile.class}`}>
+						<img src={tile.src} alt={tile.alt} loading="lazy" class="h-full w-full object-cover" />
+					</figure>
+				))
+			}
+		</div>
 
-		{
-			steps.map((step, index) => (
-				<div
-					class="proceso-step absolute inset-0 flex flex-col items-center justify-center gap-6 px-4"
-					data-step={index}
-				>
-					<img
-						src={step.image}
-						alt={step.text}
-						class="proceso-img w-full max-w-md h-64 sm:h-80 object-cover rounded-2xl shadow-2xl"
-					/>
-					<p class="proceso-text text-xl sm:text-2xl font-bold text-center max-w-lg">{step.text}</p>
-				</div>
-			))
-		}
+	<div class="proceso-caption pointer-events-none absolute inset-x-0 bottom-10 z-10 flex flex-col items-center gap-2">
+			<p class="rounded-full bg-brand-900/80 px-8 py-4 text-lg font-bold text-gold-400 shadow-xl backdrop-blur-sm sm:text-xl">
+				Conoce Nuestros Productos
+			</p>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="proceso-caption-arrow size-6 text-gold-400">
+				<polyline points="6 9 12 15 18 9"></polyline>
+			</svg>
+		</div>
 	</div>
 </section>
 
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { ExpoScaleEase } from 'gsap/EasePack';
 
-	gsap.registerPlugin(ScrollTrigger);
+	gsap.registerPlugin(ScrollTrigger, ExpoScaleEase);
 
 	const mm = gsap.matchMedia();
 
 	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
 		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
-		const steps = gsap.utils.toArray<HTMLElement>('.proceso-step');
+
+		const grid = document.querySelector<HTMLElement>('.proceso-grid');
+		const center = document.querySelector<HTMLElement>('.proceso-tile-center');
+		if (!grid || !center) return () => {};
 
 		if (reduceMotion) {
-			gsap.set(steps, { autoAlpha: 0 });
-			gsap.set(steps[0], { autoAlpha: 1 });
-
-			let currentStep = 0;
-
-			const trigger = ScrollTrigger.create({
-				trigger: '.proceso-section',
-				start: 'top top',
-				end: '+=2000',
-				pin: '.proceso-pin',
-				onUpdate: (self) => {
-					const stepIndex = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
-					if (stepIndex === currentStep) return;
-
-					gsap.to(steps[currentStep], { autoAlpha: 0, duration: 0.15, ease: 'none' });
-					gsap.to(steps[stepIndex], { autoAlpha: 1, duration: 0.15, ease: 'none' });
-					currentStep = stepIndex;
-				},
+			gsap.set('.proceso-caption', { autoAlpha: 0 });
+			gsap.to('.proceso-caption', {
+				autoAlpha: 1,
+				duration: 0.2,
+				scrollTrigger: { trigger: '.proceso-section', start: 'top 40%', toggleActions: 'play none none reverse' },
 			});
-
-			return () => trigger.kill();
+			return () => {};
 		}
 
-		gsap.set(steps, { autoAlpha: 0 });
-		gsap.set(steps[0], { autoAlpha: 1 });
+		// Zoom origin = the center tile's midpoint, in PERCENT of the grid so
+		// it stays correct when the viewport resizes (mobile URL bar, rotation)
+		// — pixel origins went stale on refresh and left the grid off-screen.
+		function setOrigin() {
+			const gridRect = grid.getBoundingClientRect();
+			const centerRect = center.getBoundingClientRect();
+			const scale = gsap.getProperty(grid, 'scaleX') as number;
+			const ox = ((centerRect.left - gridRect.left + centerRect.width / 2) / gridRect.width) * 100;
+			const oy = ((centerRect.top - gridRect.top + centerRect.height / 2) / gridRect.height) * 100;
+			if (scale === 1) gsap.set(grid, { transformOrigin: `${ox}% ${oy}%` });
+		}
+		setOrigin();
+		ScrollTrigger.addEventListener('refreshInit', setOrigin);
+
+		// Smaller zoom + shorter pin on mobile: a 3.4x scaled layer of large
+		// photos exceeds mobile GPU texture limits and renders as a blank.
+		const isMobile = window.matchMedia('(max-width: 767px)').matches;
+		const SCALE = isMobile ? 2.2 : 3.4;
+		const END = isMobile ? '+=1400' : '+=2400';
+
+		gsap.set('.proceso-caption', { autoAlpha: 0, y: 30 });
+
+		const nav = document.getElementById('floating-nav');
 
 		const tl = gsap.timeline({
 			scrollTrigger: {
 				trigger: '.proceso-section',
 				start: 'top top',
-				end: '+=2000',
-				scrub: 1,
+				end: END,
 				pin: '.proceso-pin',
+				scrub: 1,
+				invalidateOnRefresh: true,
+				onToggle: (self) => {
+					gsap.to(nav, {
+						yPercent: self.isActive ? -180 : 0,
+						autoAlpha: self.isActive ? 0 : 1,
+						duration: 0.35,
+						ease: 'power2.out',
+						overwrite: 'auto',
+					});
+				},
 			},
 		});
 
-		steps.forEach((step, index) => {
-			if (index === 0) return;
+		tl.to(grid, { scale: SCALE, duration: 1, ease: ExpoScaleEase.config(1, SCALE) }, 0)
+			.to('.proceso-caption', { autoAlpha: 1, y: 0, duration: 0.15, ease: 'none' }, 0.82);
 
-			tl.to(steps[index - 1], { autoAlpha: 0, y: -40, duration: 0.5, ease: 'power2.inOut' }).fromTo(
-				step,
-				{ autoAlpha: 0, y: 40 },
-				{ autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.inOut' },
-				'<'
-			);
-
-			tl.to({}, { duration: 0.3 });
+		gsap.to('.proceso-caption-arrow', {
+			y: 8,
+			duration: 0.7,
+			yoyo: true,
+			repeat: -1,
+			ease: 'sine.inOut',
 		});
 
 		return () => {};

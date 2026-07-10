@@ -113,13 +113,11 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 			const nav = document.getElementById('floating-nav');
 
 			if (isDesktop && !reduceMotion) {
-				const scrollTween = gsap.to('.somos-track', {
-					xPercent: -66.667,
-					ease: 'none',
+				const scrollTween = gsap.timeline({
 					scrollTrigger: {
 						trigger: '.somos-historia',
 						start: 'top top',
-						end: '+=2200',
+						end: '+=3800',
 						pin: true,
 						scrub: 1,
 						onToggle: (self) => {
@@ -133,6 +131,14 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 						},
 					},
 				});
+
+				// Dwell on each panel so it can be read before the track moves on.
+				scrollTween
+					.to({}, { duration: 0.4 })
+					.to('.somos-track', { xPercent: -33.333, duration: 0.5, ease: 'none' })
+					.to({}, { duration: 0.45 })
+					.to('.somos-track', { xPercent: -66.667, duration: 0.5, ease: 'none' })
+					.to({}, { duration: 0.5 });
 
 				gsap.utils.toArray<HTMLElement>('.somos-panel').forEach((panel, i) => {
 					const inner = panel.querySelector('.somos-inner');
