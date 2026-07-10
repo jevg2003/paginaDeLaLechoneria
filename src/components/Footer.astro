@@ -1,0 +1,20 @@
+---
+import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../lib/contact';
+---
+
+<footer class="bg-brand-900 text-cream-50">
+	<div class="mx-auto max-w-6xl px-4 py-10 flex flex-col items-center gap-4 text-center">
+		<h3 class="text-xl font-bold">Encuéntranos</h3>
+		<p class="leading-relaxed">
+			7 de agosto<br />
+			Diag 15 #71A-58<br />
+			<span class="inline-flex items-center gap-2 justify-center mt-1">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+					<path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
+				</svg>
+				<a href={PHONE_TEL_HREF} class="hover:text-gold-400 transition-colors">{PHONE_DISPLAY}</a>
+			</span>
+		</p>
+		<p class="text-cream-50/70 text-sm">© Lechonería Chancho el Lechón 2023</p>
+	</div>
+</footer>
