@@ -1,0 +1,106 @@
+---
+const steps = [
+	{
+		image: '/media/raciones-lechona-cocina.jpg',
+		text: 'Preparamos cada ración con dedicación',
+	},
+	{
+		image: '/media/racion-lechona-detalle.jpg',
+		text: 'Servida con cuero crocante y sazón exacta',
+	},
+	{
+		image: '/media/pedidos-empacados-domicilio.jpg',
+		text: 'Empacada y lista para tu domicilio',
+	},
+];
+---
+
+<section id="proceso" class="proceso-section relative bg-brand-900 text-cream-50">
+	<div class="proceso-pin relative h-screen overflow-hidden flex items-center justify-center">
+		<h2 class="proceso-heading absolute top-10 left-1/2 -translate-x-1/2 text-2xl sm:text-3xl font-extrabold text-center px-4">
+			De la Cocina a tu Domicilio
+		</h2>
+
+		{
+			steps.map((step, index) => (
+				<div
+					class="proceso-step absolute inset-0 flex flex-col items-center justify-center gap-6 px-4"
+					data-step={index}
+				>
+					<img
+						src={step.image}
+						alt={step.text}
+						class="proceso-img w-full max-w-md h-64 sm:h-80 object-cover rounded-2xl shadow-2xl"
+					/>
+					<p class="proceso-text text-xl sm:text-2xl font-bold text-center max-w-lg">{step.text}</p>
+				</div>
+			))
+		}
+	</div>
+</section>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const mm = gsap.matchMedia();
+
+	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
+		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+		const steps = gsap.utils.toArray<HTMLElement>('.proceso-step');
+
+		if (reduceMotion) {
+			gsap.set(steps, { autoAlpha: 0 });
+			gsap.set(steps[0], { autoAlpha: 1 });
+
+			let currentStep = 0;
+
+			const trigger = ScrollTrigger.create({
+				trigger: '.proceso-section',
+				start: 'top top',
+				end: '+=2000',
+				pin: '.proceso-pin',
+				onUpdate: (self) => {
+					const stepIndex = Math.min(steps.length - 1, Math.floor(self.progress * steps.length));
+					if (stepIndex === currentStep) return;
+
+					gsap.to(steps[currentStep], { autoAlpha: 0, duration: 0.15, ease: 'none' });
+					gsap.to(steps[stepIndex], { autoAlpha: 1, duration: 0.15, ease: 'none' });
+					currentStep = stepIndex;
+				},
+			});
+
+			return () => trigger.kill();
+		}
+
+		gsap.set(steps, { autoAlpha: 0 });
+		gsap.set(steps[0], { autoAlpha: 1 });
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: '.proceso-section',
+				start: 'top top',
+				end: '+=2000',
+				scrub: 1,
+				pin: '.proceso-pin',
+			},
+		});
+
+		steps.forEach((step, index) => {
+			if (index === 0) return;
+
+			tl.to(steps[index - 1], { autoAlpha: 0, y: -40, duration: 0.5, ease: 'power2.inOut' }).fromTo(
+				step,
+				{ autoAlpha: 0, y: 40 },
+				{ autoAlpha: 1, y: 0, duration: 0.5, ease: 'power2.inOut' },
+				'<'
+			);
+
+			tl.to({}, { duration: 0.3 });
+		});
+
+		return () => {};
+	});
+</script>

@@ -1,0 +1,182 @@
+---
+const links = [
+	{ href: '#somos-chancho', label: 'Quiénes Somos' },
+	{ href: '#vision-mision', label: 'Misión y Visión' },
+	{ href: '#nuestros-productos', label: 'Nuestros Productos' },
+	{ href: '#caracteristicas', label: 'Características' },
+	{ href: '#redes', label: 'Contáctanos' },
+];
+---
+
+<header id="floating-nav" class="fixed top-4 inset-x-4 z-40 transition-colors duration-300">
+	<div class="floating-nav-pill mx-auto max-w-6xl rounded-full border border-cream-50/10 bg-brand-900/40 px-4 py-2 backdrop-blur-md transition-colors duration-300 sm:px-6">
+		<div class="flex items-center justify-between gap-4">
+			<a href="#hero" class="flex items-center gap-2 shrink-0">
+				<img src="/media/logoChanchoLechon3.webp" alt="Lechonería Chancho el Lechón" class="nav-logo h-12 w-12 object-contain transition-transform hover:scale-110" />
+				<span class="hidden font-bold text-cream-50 text-base leading-tight xs:inline">Chancho el Lechón</span>
+			</a>
+
+			<nav class="hidden md:flex items-center gap-6">
+				{links.map((link) => (
+					<a href={link.href} class="text-cream-50 font-medium hover:text-gold-400 transition-colors">
+						{link.label}
+					</a>
+				))}
+			</nav>
+
+			<button
+				id="nav-menu-toggle"
+				aria-label="Abrir menú"
+				aria-expanded="false"
+				aria-controls="nav-mobile-menu"
+				class="md:hidden relative inline-flex size-9 items-center justify-center rounded-full text-cream-50 hover:bg-cream-50/10 transition-colors"
+			>
+				<span class="nav-burger-line nav-burger-line-top absolute h-0.5 w-5 rounded-full bg-current"></span>
+				<span class="nav-burger-line nav-burger-line-mid absolute h-0.5 w-5 rounded-full bg-current"></span>
+				<span class="nav-burger-line nav-burger-line-bottom absolute h-0.5 w-5 rounded-full bg-current"></span>
+			</button>
+		</div>
+
+		<nav id="nav-mobile-menu" class="nav-mobile-menu md:hidden h-0 overflow-hidden">
+			<div class="border-t border-cream-50/10 mt-2 pt-2">
+				{links.map((link) => (
+					<a href={link.href} class="nav-mobile-link block py-3 text-cream-50 font-medium border-b border-cream-50/10 last:border-b-0 hover:text-gold-400 transition-colors">
+						{link.label}
+					</a>
+				))}
+			</div>
+		</nav>
+	</div>
+</header>
+
+<script>
+	import gsap from 'gsap';
+
+	const toggle = document.getElementById('nav-menu-toggle');
+	const menu = document.getElementById('nav-mobile-menu');
+	const pill = document.querySelector<HTMLElement>('.floating-nav-pill');
+
+	const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	const openDuration = reduceMotion ? 0.2 : 0.4;
+	const openEase = reduceMotion ? 'power1.out' : 'back.out(1.4)';
+
+	const navLinks = gsap.utils.toArray<HTMLElement>('.nav-mobile-link');
+	const burgerTop = document.querySelector('.nav-burger-line-top');
+	const burgerMid = document.querySelector('.nav-burger-line-mid');
+	const burgerBottom = document.querySelector('.nav-burger-line-bottom');
+
+	gsap.set(burgerTop, { y: -6 });
+	gsap.set(burgerBottom, { y: 6 });
+
+	gsap.set(menu, { height: 0, autoAlpha: 0 });
+	gsap.set(navLinks, { autoAlpha: 0, x: reduceMotion ? 0 : -12 });
+
+	// Logo entrance on load — a small one-time sign of life.
+	gsap.from('.nav-logo', {
+		autoAlpha: 0,
+		scale: reduceMotion ? 1 : 0.6,
+		rotation: reduceMotion ? 0 : -15,
+		duration: reduceMotion ? 0.3 : 0.6,
+		ease: 'back.out(1.8)',
+	});
+
+	let isOpen = false;
+	let animating = false;
+
+	function setOpen(open: boolean) {
+		if (!menu || animating || isOpen === open) return;
+		animating = true;
+		isOpen = open;
+		toggle?.setAttribute('aria-expanded', String(open));
+		pill?.classList.toggle('floating-nav-pill--menu-open', open);
+
+		const burgerDuration = reduceMotion ? 0.15 : 0.3;
+		if (open) {
+			gsap.to(burgerTop, { rotation: 45, y: 0, duration: burgerDuration, ease: 'power2.inOut' });
+			gsap.to(burgerMid, { autoAlpha: 0, duration: burgerDuration * 0.6 });
+			gsap.to(burgerBottom, { rotation: -45, y: 0, duration: burgerDuration, ease: 'power2.inOut' });
+		} else {
+			gsap.to(burgerTop, { rotation: 0, y: -6, duration: burgerDuration, ease: 'power2.inOut' });
+			gsap.to(burgerMid, { autoAlpha: 1, duration: burgerDuration });
+			gsap.to(burgerBottom, { rotation: 0, y: 6, duration: burgerDuration, ease: 'power2.inOut' });
+		}
+
+		// Snap the radius before growing: tweening from 9999px passes through
+		// huge values that draw an ellipse across the logo/burger row.
+		if (open) gsap.set(pill, { borderRadius: '1.5rem' });
+
+		// Logo and burger react with the menu instead of sitting still.
+		if (!reduceMotion) {
+			gsap.fromTo(
+				'.nav-logo',
+				{ scale: 1 },
+				{ scale: 1.12, rotation: open ? 6 : -6, duration: 0.18, yoyo: true, repeat: 1, ease: 'power1.inOut' }
+			);
+			gsap.fromTo(toggle, { scale: 1 }, { scale: 0.85, duration: 0.12, yoyo: true, repeat: 1, ease: 'power1.inOut' });
+		}
+
+		if (open) {
+			gsap.set(menu, { autoAlpha: 1 });
+			gsap.fromTo(
+				menu,
+				{ height: 0 },
+				{
+					height: 'auto',
+					duration: openDuration,
+					ease: openEase,
+					onComplete: () => {
+						animating = false;
+					},
+				}
+			);
+			gsap.to(navLinks, {
+				autoAlpha: 1,
+				x: 0,
+				duration: reduceMotion ? 0.2 : 0.35,
+				stagger: reduceMotion ? 0.03 : 0.06,
+				delay: reduceMotion ? 0.05 : 0.1,
+				ease: 'power2.out',
+			});
+		} else {
+			gsap.set(navLinks, { autoAlpha: 0, x: reduceMotion ? 0 : -12 });
+			gsap.to(menu, {
+				height: 0,
+				autoAlpha: 0,
+				duration: reduceMotion ? 0.15 : 0.25,
+				ease: 'power1.in',
+				onComplete: () => {
+					gsap.set(pill, { borderRadius: '9999px' });
+					animating = false;
+				},
+			});
+		}
+	}
+
+	toggle?.addEventListener('click', () => setOpen(!isOpen));
+
+	menu?.querySelectorAll('a').forEach((link) => {
+		link.addEventListener('click', () => setOpen(false));
+	});
+</script>
+
+<script>
+	const pill = document.querySelector<HTMLElement>('.floating-nav-pill');
+
+	if (pill) {
+		const updateScrolled = () => {
+			pill.classList.toggle('floating-nav-pill--scrolled', window.scrollY > 80);
+		};
+		updateScrolled();
+		window.addEventListener('scroll', updateScrolled, { passive: true });
+	}
+</script>
+
+<style>
+	.floating-nav-pill--scrolled,
+	.floating-nav-pill--menu-open {
+		background-color: color-mix(in srgb, var(--color-brand-900) 92%, transparent);
+		box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.35);
+	}
+
+
+</style>
