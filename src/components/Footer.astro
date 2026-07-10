@@ -1,9 +1,20 @@
 ---
+import { Image } from 'astro:assets';
 import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../lib/contact';
+import decorativePig from '../assets/images/pendiente-decorativo-cerdo-cuero.png';
 ---
 
-<footer class="bg-brand-900 text-cream-50">
-	<div class="mx-auto max-w-6xl px-4 py-10 flex flex-col items-center gap-4 text-center">
+<footer class="footer-section relative overflow-hidden bg-brand-900 text-cream-50">
+	<Image
+		src={decorativePig}
+		alt=""
+		aria-hidden="true"
+		widths={[200, 320]}
+		sizes="(min-width: 640px) 128px, 96px"
+		class="footer-decorative-pig pointer-events-none absolute bottom-0 left-4 w-24 sm:w-32 select-none"
+	/>
+
+	<div class="relative mx-auto max-w-6xl px-4 py-10 flex flex-col items-center gap-4 text-center">
 		<h3 class="text-xl font-bold">Encuéntranos</h3>
 		<p class="leading-relaxed">
 			7 de agosto<br />
@@ -18,3 +29,30 @@ import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../lib/contact';
 		<p class="text-cream-50/70 text-sm">© Lechonería Chancho el Lechón 2023</p>
 	</div>
 </footer>
+
+<script>
+	import gsap from 'gsap';
+
+	const mm = gsap.matchMedia();
+
+	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
+		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+		const pig = document.querySelector<HTMLElement>('.footer-decorative-pig');
+		if (!pig) return () => {};
+
+		if (reduceMotion) {
+			gsap.set(pig, { autoAlpha: 1, y: 0 });
+			return () => {};
+		}
+
+		const tween = gsap.to(pig, {
+			y: -10,
+			duration: 2.4,
+			ease: 'sine.inOut',
+			repeat: -1,
+			yoyo: true,
+		});
+
+		return () => tween.kill();
+	});
+</script>

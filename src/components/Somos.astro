@@ -1,34 +1,202 @@
 ---
+import { Image } from 'astro:assets';
+import somosImg from '../assets/images/lechona-entera-horneada.png';
 ---
 
-<section id="somos-chancho" class="py-16 sm:py-20 bg-cream-50">
-	<div class="mx-auto max-w-6xl px-4 grid gap-10 md:grid-cols-2 items-center">
-		<img
-			src="/media/lechonaBig.webp"
-			alt="Lechona Chancho el Lechón"
-			class="w-full h-72 sm:h-96 object-cover rounded-2xl shadow-xl"
-		/>
-		<div>
-			<h2 class="text-3xl sm:text-4xl font-extrabold text-brand-800">Quiénes Somos</h2>
-			<h4 class="mt-2 text-gold-600 font-semibold text-lg">
-				LECHONERÍA CHANCHO EL LECHÓN, Empresa Caleña fundada en el año 2019.
-			</h4>
-			<div class="mt-6 bg-brand-800 text-cream-50 rounded-2xl p-6 shadow-lg space-y-4 leading-relaxed">
-				<p>
-					Elaboramos las mejores lechonas de la ciudad, ofreciendo a todos nuestros clientes un producto de
-					excelente calidad, con un sabor particular, muy buena carne y un cuero súper crocante, una sazón
-					exquisita ya que su preparación es especial debido al proceso de drenaje del Aceite que la hace muy
-					seca y cero grasa.
-				</p>
-				<p>
-					Ofrecemos Cojines y Lechonas desde 15 porciones en adelante con precios muy competitivos que se
-					adaptan a cualquier presupuesto.
-				</p>
-				<p>
-					Hacemos lechona mixta (cabanos, pollo, costilla ahumada y cerdo), pernil de cerdo asado y tamales
-					vallunos y tolimenses.
+<section id="somos-chancho" class="somos-historia relative overflow-hidden bg-brand-800 text-cream-50">
+	<div class="somos-track flex flex-col md:h-screen md:w-[300vw] md:flex-row">
+		<article class="somos-panel flex min-h-[80vh] w-full items-center px-4 py-16 md:h-screen md:w-screen md:py-0">
+			<div class="somos-inner mx-auto grid max-w-6xl items-center gap-10 md:grid-cols-2">
+				<div>
+					<span class="eyebrow-label !text-gold-400">Nuestra historia</span>
+					<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Quiénes Somos</h2>
+					<h4 class="mt-3 text-lg font-semibold text-gold-400">
+						LECHONERÍA CHANCHO EL LECHÓN, Empresa Caleña fundada en el año 2019.
+					</h4>
+					<div class="mt-6 space-y-4 leading-relaxed text-cream-50/90">
+						<p>
+							Elaboramos las mejores lechonas de la ciudad, ofreciendo a todos nuestros clientes un producto de
+							excelente calidad, con un sabor particular, muy buena carne y un cuero súper crocante, una sazón
+							exquisita ya que su preparación es especial debido al proceso de drenaje del Aceite que la hace muy
+							seca y cero grasa.
+						</p>
+						<p>
+							Ofrecemos Cojines y Lechonas desde 15 porciones en adelante con precios muy competitivos que se
+							adaptan a cualquier presupuesto.
+						</p>
+						<p>
+							Hacemos lechona mixta (cabanos, pollo, costilla ahumada y cerdo), pernil de cerdo asado y tamales
+							vallunos y tolimenses.
+						</p>
+					</div>
+				</div>
+				<div class="somos-img relative flex justify-center">
+					<Image
+						src={somosImg}
+						alt="Lechona entera horneada, Chancho el Lechón"
+						class="max-h-[75vh] w-auto rounded-3xl object-contain shadow-2xl ring-2 ring-gold-400/30"
+						widths={[480, 768, 1024]}
+						sizes="(min-width: 768px) 26rem, 85vw"
+						format="webp"
+						quality={85}
+					/>
+				</div>
+			</div>
+		</article>
+
+		<article
+			id="vision-mision"
+			class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-700 px-4 py-16 md:h-screen md:w-screen md:py-0"
+		>
+			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+				<span class="somos-shape somos-shape-ring absolute left-[8%] top-[18%] size-24 rounded-full border-4 border-gold-400/40"></span>
+				<span class="somos-shape somos-shape-dot absolute right-[12%] top-[25%] size-6 rounded-full bg-gold-400/70"></span>
+				<span class="somos-shape somos-shape-square absolute bottom-[18%] right-[20%] size-16 rotate-12 rounded-lg border-4 border-cream-50/25"></span>
+				<span class="somos-shape somos-shape-dot2 absolute bottom-[30%] left-[15%] size-4 rounded-full bg-cream-50/50"></span>
+			</div>
+			<div class="somos-inner mx-auto max-w-4xl">
+				<span class="eyebrow-label !text-gold-400">Lo que nos mueve</span>
+				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Misión</h2>
+				<p class="mt-8 text-lg leading-relaxed text-cream-50/90 sm:text-xl">
+					Nuestra lechonería en Santiago de Cali se dedica a preparar y vender lechona tradicional tolimense,
+					utilizando ingredientes frescos y recetas auténticas. Nuestro objetivo es preservar y compartir la
+					tradición gastronómica, ofreciendo una experiencia culinaria única y deliciosa. Nos distinguimos por
+					nuestra calidad, atención al detalle y compromiso con la satisfacción del cliente. Medimos nuestro éxito a
+					través de la satisfacción del cliente y el reconocimiento en la comunidad.
 				</p>
 			</div>
-		</div>
+		</article>
+
+		<article class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-900 px-4 py-16 md:h-screen md:w-screen md:py-0">
+			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+				<span class="somos-shape somos-shape-ring absolute right-[10%] top-[15%] size-32 rounded-full border-4 border-gold-400/30"></span>
+				<span class="somos-shape somos-shape-cross absolute left-[10%] top-[30%] text-4xl font-black text-gold-400/50">+</span>
+				<span class="somos-shape somos-shape-dot absolute bottom-[22%] left-[22%] size-5 rounded-full bg-gold-400/60"></span>
+				<span class="somos-shape somos-shape-square absolute bottom-[15%] right-[15%] size-12 -rotate-6 rounded-lg border-4 border-cream-50/20"></span>
+			</div>
+			<div class="somos-inner mx-auto max-w-4xl">
+				<span class="eyebrow-label !text-gold-400">Hacia dónde vamos</span>
+				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Visión</h2>
+				<p class="mt-8 text-lg leading-relaxed text-cream-50/90 sm:text-xl">
+					En 2030 años ser la lechonería líder en Santiago de Cali, reconocida por nuestra autenticidad y calidad en
+					la preparación de lechona tradicional tolimense. Aspiramos a ofrecer una experiencia culinaria única y
+					memorable, preservando y compartiendo la rica tradición gastronómica de la lechona. Nos comprometemos a
+					adaptarnos a las nuevas tendencias del mercado y a mantener una fuerte presencia en plataformas digitales,
+					asegurando siempre la satisfacción de nuestros clientes.
+				</p>
+			</div>
+		</article>
 	</div>
 </section>
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	const mm = gsap.matchMedia();
+
+	mm.add(
+		{
+			reduceMotion: '(prefers-reduced-motion: reduce)',
+			okMotion: '(prefers-reduced-motion: no-preference)',
+			isDesktop: '(min-width: 768px)',
+			isMobile: '(max-width: 767px)',
+		},
+		(context) => {
+			const { reduceMotion, isDesktop } = context.conditions as {
+				reduceMotion: boolean;
+				isDesktop: boolean;
+			};
+
+			const nav = document.getElementById('floating-nav');
+
+			if (isDesktop && !reduceMotion) {
+				const scrollTween = gsap.to('.somos-track', {
+					xPercent: -66.667,
+					ease: 'none',
+					scrollTrigger: {
+						trigger: '.somos-historia',
+						start: 'top top',
+						end: '+=2200',
+						pin: true,
+						scrub: 1,
+						onToggle: (self) => {
+							gsap.to(nav, {
+								yPercent: self.isActive ? -180 : 0,
+								autoAlpha: self.isActive ? 0 : 1,
+								duration: 0.35,
+								ease: 'power2.out',
+								overwrite: 'auto',
+							});
+						},
+					},
+				});
+
+				gsap.utils.toArray<HTMLElement>('.somos-panel').forEach((panel, i) => {
+					const inner = panel.querySelector('.somos-inner');
+					if (i === 0) {
+						gsap.from(inner, {
+							autoAlpha: 0,
+							y: 40,
+							duration: 0.8,
+							ease: 'power3.out',
+							scrollTrigger: {
+								trigger: panel,
+								start: 'top 70%',
+								toggleActions: 'play none none none',
+							},
+						});
+						return;
+					}
+					// Panels inside the horizontal track never cross vertical
+					// trigger points — their reveals must ride containerAnimation.
+					gsap.from(inner, {
+						autoAlpha: 0,
+						y: 60,
+						scale: 0.96,
+						duration: 0.9,
+						ease: 'power3.out',
+						scrollTrigger: {
+							containerAnimation: scrollTween,
+							trigger: panel,
+							start: 'left 65%',
+							toggleActions: 'play none none none',
+						},
+					});
+				});
+
+				gsap.utils.toArray<HTMLElement>('.somos-shape').forEach((shape, i) => {
+					gsap.to(shape, {
+						y: i % 2 === 0 ? '+=18' : '-=14',
+						rotation: i % 3 === 0 ? 25 : -18,
+						duration: 2.6 + (i % 4) * 0.7,
+						yoyo: true,
+						repeat: -1,
+						ease: 'sine.inOut',
+						delay: i * 0.3,
+					});
+				});
+			} else {
+				gsap.utils.toArray<HTMLElement>('.somos-panel').forEach((panel) => {
+					gsap.from(panel, {
+						autoAlpha: 0,
+						y: reduceMotion ? 0 : 40,
+						duration: reduceMotion ? 0.3 : 0.8,
+						ease: 'power3.out',
+						scrollTrigger: {
+							trigger: panel,
+							start: 'top 80%',
+							toggleActions: 'play none none reverse',
+						},
+					});
+				});
+			}
+
+			return () => {
+				if (nav) gsap.set(nav, { yPercent: 0, autoAlpha: 1 });
+			};
+		}
+	);
+</script>

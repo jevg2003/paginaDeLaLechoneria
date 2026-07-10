@@ -31,3 +31,13 @@ html {
 body {
 	font-family: var(--font-sans);
 }
+
+@layer components {
+	.eyebrow-label {
+		@apply inline-block text-xs sm:text-sm font-bold tracking-[0.2em] uppercase text-gold-600 mb-3;
+	}
+
+	.editorial-heading {
+		@apply text-3xl sm:text-4xl lg:text-5xl font-extrabold text-brand-800 leading-tight;
+	}
+}
