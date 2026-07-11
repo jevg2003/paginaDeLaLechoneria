@@ -28,7 +28,7 @@ const products = [
 	{
 		id: 'cajas-detal',
 		name: 'Cajas de Lechona al Detal',
-		image: '/media/racion-lechona-detalle.jpg',
+		image: '/media/racion-lechona-detalle.webp',
 		info: 'Raciones individuales en caja con arepa y cuero, listas para servir. Ventas al detal aquí en nuestro local.',
 		message: 'Hola! Me interesa una Caja de Lechona al Detal. ¿Podrían darme más información?',
 	},
@@ -72,18 +72,20 @@ const products = [
 
 <section id="nuestros-productos" class="py-16 sm:py-20 bg-cream-50">
 	<div class="w-full px-4 sm:px-8">
-		<span class="eyebrow-label">El menú de la casa</span>
-		<h2 class="editorial-heading mb-2">¡Nuestros Productos!</h2>
-		<p class="mb-10 text-lg font-semibold text-brand-600">
-			Toca cada foto para conocer el producto y pedir tu cotización 👇
-		</p>
+		<div class="mx-auto max-w-3xl text-center">
+			<span class="eyebrow-label">El menú de la casa</span>
+			<h2 class="editorial-heading mb-2">¡Nuestros Productos!</h2>
+			<p class="mb-10 text-lg font-semibold text-brand-600">
+				Toca cada foto para conocer el producto y pedir tu cotización 👇
+			</p>
+		</div>
 
-		<div class="productos-grid grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
+		<div class="productos-grid grid grid-cols-2 gap-3 md:grid-cols-3 lg:gap-4">
 			{
 				products.map((p) => (
 					<button
 						type="button"
-						class="producto-card group relative aspect-square cursor-pointer overflow-hidden rounded-2xl shadow-lg outline-offset-4 transition-shadow hover:shadow-2xl"
+						class="producto-card group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl shadow-lg outline-offset-4 transition-shadow hover:shadow-2xl"
 						data-product={p.id}
 						aria-label={`Ver ${p.name}`}
 					>
@@ -299,7 +301,7 @@ const products = [
 
 	// Pulsing "+" hint so it's obvious the cards are pressable.
 	if (!reduceMotion) {
-		gsap.to('.producto-hint', {
+		const hintTween = gsap.to('.producto-hint', {
 			scale: 1.2,
 			duration: 0.8,
 			yoyo: true,
@@ -307,5 +309,11 @@ const products = [
 			ease: 'sine.inOut',
 			stagger: 0.15,
 		});
+
+		// Pause the pulse while the section is offscreen.
+		const section = document.getElementById('nuestros-productos')!;
+		new IntersectionObserver(([entry]) => {
+			entry.isIntersecting ? hintTween.play() : hintTween.pause();
+		}).observe(section);
 	}
 </script>

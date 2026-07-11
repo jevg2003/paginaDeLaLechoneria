@@ -49,12 +49,12 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 			class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-700 px-4 py-16 md:h-screen md:w-screen md:py-0"
 		>
 			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
-				<span class="somos-shape somos-shape-ring absolute left-[8%] top-[18%] size-24 rounded-full border-4 border-gold-400/40"></span>
-				<span class="somos-shape somos-shape-dot absolute right-[12%] top-[25%] size-6 rounded-full bg-gold-400/70"></span>
-				<span class="somos-shape somos-shape-square absolute bottom-[18%] right-[20%] size-16 rotate-12 rounded-lg border-4 border-cream-50/25"></span>
-				<span class="somos-shape somos-shape-dot2 absolute bottom-[30%] left-[15%] size-4 rounded-full bg-cream-50/50"></span>
+				<span class="somos-shape somos-shape-ring somos-morph absolute left-[8%] top-[18%] size-24 bg-gold-400/40"></span>
+				<span class="somos-shape somos-shape-dot somos-morph absolute right-[12%] top-[25%] size-12 bg-gold-400/70"></span>
+				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[18%] right-[20%] size-16 bg-cream-50/30"></span>
+				<span class="somos-shape somos-shape-dot2 somos-morph absolute bottom-[30%] left-[15%] size-10 bg-cream-50/50"></span>
 			</div>
-			<div class="somos-inner mx-auto max-w-4xl">
+			<div class="somos-inner relative z-10 mx-auto max-w-4xl">
 				<span class="eyebrow-label !text-gold-400">Lo que nos mueve</span>
 				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Misión</h2>
 				<p class="mt-8 text-lg leading-relaxed text-cream-50/90 sm:text-xl">
@@ -69,12 +69,12 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 
 		<article class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-900 px-4 py-16 md:h-screen md:w-screen md:py-0">
 			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
-				<span class="somos-shape somos-shape-ring absolute right-[10%] top-[15%] size-32 rounded-full border-4 border-gold-400/30"></span>
+				<span class="somos-shape somos-shape-ring somos-morph absolute right-[10%] top-[15%] size-28 bg-gold-400/30"></span>
 				<span class="somos-shape somos-shape-cross absolute left-[10%] top-[30%] text-4xl font-black text-gold-400/50">+</span>
-				<span class="somos-shape somos-shape-dot absolute bottom-[22%] left-[22%] size-5 rounded-full bg-gold-400/60"></span>
-				<span class="somos-shape somos-shape-square absolute bottom-[15%] right-[15%] size-12 -rotate-6 rounded-lg border-4 border-cream-50/20"></span>
+				<span class="somos-shape somos-shape-dot somos-morph absolute bottom-[22%] left-[22%] size-12 bg-gold-400/60"></span>
+				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[15%] right-[15%] size-14 bg-cream-50/25"></span>
 			</div>
-			<div class="somos-inner mx-auto max-w-4xl">
+			<div class="somos-inner relative z-10 mx-auto max-w-4xl">
 				<span class="eyebrow-label !text-gold-400">Hacia dónde vamos</span>
 				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Visión</h2>
 				<p class="mt-8 text-lg leading-relaxed text-cream-50/90 sm:text-xl">
@@ -92,8 +92,10 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { Draggable } from 'gsap/Draggable';
+	import { InertiaPlugin } from 'gsap/InertiaPlugin';
 
-	gsap.registerPlugin(ScrollTrigger);
+	gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin);
 
 	const mm = gsap.matchMedia();
 
@@ -110,8 +112,6 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 				isDesktop: boolean;
 			};
 
-			const nav = document.getElementById('floating-nav');
-
 			if (isDesktop && !reduceMotion) {
 				const scrollTween = gsap.timeline({
 					scrollTrigger: {
@@ -120,15 +120,6 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 						end: '+=3800',
 						pin: true,
 						scrub: 1,
-						onToggle: (self) => {
-							gsap.to(nav, {
-								yPercent: self.isActive ? -180 : 0,
-								autoAlpha: self.isActive ? 0 : 1,
-								duration: 0.35,
-								ease: 'power2.out',
-								overwrite: 'auto',
-							});
-						},
 					},
 				});
 
@@ -173,17 +164,6 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 					});
 				});
 
-				gsap.utils.toArray<HTMLElement>('.somos-shape').forEach((shape, i) => {
-					gsap.to(shape, {
-						y: i % 2 === 0 ? '+=18' : '-=14',
-						rotation: i % 3 === 0 ? 25 : -18,
-						duration: 2.6 + (i % 4) * 0.7,
-						yoyo: true,
-						repeat: -1,
-						ease: 'sine.inOut',
-						delay: i * 0.3,
-					});
-				});
 			} else {
 				gsap.utils.toArray<HTMLElement>('.somos-panel').forEach((panel) => {
 					gsap.from(panel, {
@@ -200,9 +180,162 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 				});
 			}
 
-			return () => {
-				if (nav) gsap.set(nav, { yPercent: 0, autoAlpha: 1 });
-			};
+			// --- Playful physics for the Misión/Visión shapes: drag & fling them
+			// (Draggable + inertia), they spin on release, get expelled if they
+			// land over the text, and wander/morph on their own when idle.
+			if (!reduceMotion) {
+				const idleTweens: gsap.core.Animation[] = [];
+				const allShapes = gsap.utils.toArray<HTMLElement>('.somos-shape');
+				const wanderOf = new Map<HTMLElement, gsap.core.Tween>();
+
+				// 8-point polygons (same vertex count) so clip-path morphs
+				// smoothly between clearly different silhouettes.
+				const POLYS = [
+					'polygon(50% 0%, 85% 15%, 100% 50%, 85% 85%, 50% 100%, 15% 85%, 0% 50%, 15% 15%)', // circle-ish
+					'polygon(0% 0%, 50% 0%, 100% 0%, 100% 50%, 100% 100%, 50% 100%, 0% 100%, 0% 50%)', // square
+					'polygon(50% 0%, 75% 50%, 100% 100%, 75% 100%, 50% 100%, 25% 100%, 0% 100%, 25% 50%)', // triangle
+					'polygon(50% 0%, 100% 38%, 100% 38%, 81% 100%, 50% 100%, 19% 100%, 0% 38%, 0% 38%)', // pentagon
+					'polygon(50% 0%, 75% 25%, 100% 50%, 75% 75%, 50% 100%, 25% 75%, 0% 50%, 25% 25%)', // rhombus
+				];
+
+				// Arcade-style collision: a dragged/thrown shape knocks away any
+				// shape it touches, sending it flying with a spin.
+				function knockOthers(shape: HTMLElement) {
+					const panel = shape.closest('.somos-panel');
+					const a = shape.getBoundingClientRect();
+					allShapes.forEach((other) => {
+						if (other === shape || other.closest('.somos-panel') !== panel) return;
+						const b = other.getBoundingClientRect();
+						const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+						const dy = b.top + b.height / 2 - (a.top + a.height / 2);
+						const dist = Math.hypot(dx, dy);
+						const min = (a.width + b.width) / 2;
+						if (dist === 0 || dist >= min) return;
+						const force = (min - dist) * 1.6 + 50;
+						wanderOf.get(other)?.pause();
+						gsap.to(other, {
+							x: `+=${(dx / dist) * force}`,
+							y: `+=${(dy / dist) * force}`,
+							rotation: `+=${gsap.utils.random(-180, 180)}`,
+							duration: 0.7,
+							ease: 'power2.out',
+							overwrite: true,
+							onComplete: () => {
+								expelFromText(other);
+								wanderOf.get(other)?.invalidate().play();
+							},
+						});
+					});
+				}
+
+				// Push a shape out of the text block along the shortest axis.
+				function expelFromText(shape: HTMLElement) {
+					const inner = shape.closest('.somos-panel')?.querySelector('.somos-inner');
+					if (!inner) return;
+					const s = shape.getBoundingClientRect();
+					const t = inner.getBoundingClientRect();
+					const m = 20;
+					const overlaps = s.right > t.left - m && s.left < t.right + m && s.bottom > t.top - m && s.top < t.bottom + m;
+					if (!overlaps) return;
+					const pushes = [
+						{ axis: 'x', v: t.left - m - s.right },
+						{ axis: 'x', v: t.right + m - s.left },
+						{ axis: 'y', v: t.top - m - s.bottom },
+						{ axis: 'y', v: t.bottom + m - s.top },
+					];
+					const best = pushes.reduce((a, b) => (Math.abs(a.v) < Math.abs(b.v) ? a : b));
+					gsap.to(shape, { [best.axis]: `+=${best.v}`, duration: 0.65, ease: 'back.out(1.8)' });
+				}
+
+				allShapes.forEach((shape) => {
+					shape.style.pointerEvents = 'auto';
+					shape.style.cursor = 'grab';
+					shape.style.touchAction = 'none';
+					const panel = shape.closest<HTMLElement>('.somos-panel')!;
+
+					// Idle wander: small random strolls, re-rolled on every repeat.
+					const wander = gsap.to(shape, {
+						x: () => `+=${gsap.utils.random(-45, 45)}`,
+						y: () => `+=${gsap.utils.random(-35, 35)}`,
+						rotation: () => `+=${gsap.utils.random(-50, 50)}`,
+						duration: () => gsap.utils.random(2.5, 4.5),
+						ease: 'sine.inOut',
+						repeat: -1,
+						repeatRefresh: true,
+						onRepeat: () => expelFromText(shape),
+					});
+					wanderOf.set(shape, wander);
+					idleTweens.push(wander);
+
+					// Idle morph: cycle through visibly different silhouettes
+					// (circle → square → triangle → pentagon → rhombus).
+					if (shape.classList.contains('somos-morph')) {
+						gsap.set(shape, { clipPath: POLYS[0] });
+						const order = gsap.utils.shuffle([...POLYS.slice(1), POLYS[0]]);
+						const morph = gsap.timeline({ repeat: -1 });
+						order.forEach((poly) => {
+							morph.to(shape, { clipPath: poly, duration: gsap.utils.random(1.6, 2.6), ease: 'sine.inOut' });
+						});
+						idleTweens.push(morph);
+					}
+
+					Draggable.create(shape, {
+						type: 'x,y',
+						bounds: panel,
+						inertia: true,
+						edgeResistance: 0.7,
+						onPress() {
+							wander.pause();
+							gsap.to(shape, { scale: 1.25, duration: 0.2, ease: 'power2.out', overwrite: 'auto' });
+						},
+						onDrag() {
+							knockOthers(shape);
+						},
+						onRelease() {
+							gsap.to(shape, {
+								scale: 1,
+								rotation: `+=${gsap.utils.random(-240, 240)}`,
+								duration: 0.9,
+								ease: 'power2.out',
+							});
+						},
+						onThrowUpdate() {
+							knockOthers(shape);
+						},
+						onThrowComplete() {
+							gsap.fromTo(
+								shape,
+								{ scaleX: 1.25, scaleY: 0.8 },
+								{ scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.35)' }
+							);
+							expelFromText(shape);
+							// Re-record the wander from wherever the shape landed —
+							// resuming the stale tween used to drag it back home.
+							wander.invalidate().restart(true);
+						},
+					});
+				});
+
+				// Pause the idle loops while the section is offscreen. The end
+				// must account for the pin distance (the section holds the
+				// viewport for +=3800 on desktop) — with a plain 'bottom top'
+				// end, landing mid-pin (e.g. reload) read as "already past it"
+				// and left the tweens stuck paused. onRefresh re-syncs state.
+				const syncIdle = (self: ScrollTrigger) =>
+					idleTweens.forEach((t) => (self.isActive ? t.play() : t.pause()));
+				ScrollTrigger.create({
+					trigger: '.somos-historia',
+					start: 'top bottom',
+					end: () => {
+						const section = document.querySelector<HTMLElement>('.somos-historia')!;
+						return `+=${section.offsetHeight + window.innerHeight + (isDesktop ? 3800 : 0)}`;
+					},
+					onToggle: syncIdle,
+					onRefresh: syncIdle,
+				});
+			}
+
+			return () => {};
 		}
 	);
 </script>

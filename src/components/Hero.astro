@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import cajasImg from '../assets/images/racion-cojin-hero-hd.jpg';
+import cajasImg from '../assets/images/racion-cojin-hero-hd.webp';
 import lechonaAbierta from '../assets/images/lechona-abierta-cutout.png';
 import pernil from '../assets/images/pernil-cutout.png';
 import lechonaMixta from '../assets/images/lechona-mixta-cutout.png';
@@ -17,6 +17,16 @@ const rotationImages = [
 ];
 ---
 
+<div id="hero-loader" class="fixed inset-0 z-[80] flex flex-col items-center justify-center gap-5 bg-brand-600">
+	<img src="/media/logoChanchoLechon3.webp" alt="" class="hero-loader-logo h-28 w-auto drop-shadow-xl" />
+	<div class="flex gap-2" aria-hidden="true">
+		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
+		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
+		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
+	</div>
+	<span class="sr-only">Cargando…</span>
+</div>
+
 <section id="hero" class="hero-section relative isolate min-h-screen overflow-hidden bg-brand-600 text-cream-50">
 	<div class="hero-particles pointer-events-none absolute inset-0" aria-hidden="true">
 		<span class="hero-particle hero-particle-1 absolute left-[12%] top-[22%] size-16 rounded-full bg-gold-300/30 blur-2xl"></span>
@@ -28,18 +38,28 @@ const rotationImages = [
 
 	<div class="hero-content relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center gap-3 px-4 pb-24 pt-24 text-center">
 
-		<h1 class="hero-title text-4xl font-extrabold leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
-			<span class="hero-title-line block">La Mejor</span>
-			<span class="hero-title-line block text-gold-400">Lechonería</span>
-			<span class="hero-title-line block">de la Ciudad</span>
-		</h1>
+		<div class="hero-heading flex items-center justify-center gap-4 sm:gap-7">
+			<div class="hero-logo-wrap shrink-0">
+				<img
+					src="/media/logoChanchoLechon3.webp"
+					alt="Logo de Lechonería Chancho el Lechón"
+					class="hero-logo h-24 w-auto drop-shadow-2xl sm:h-32 lg:h-40"
+				/>
+			</div>
+
+			<h1 class="hero-title text-left font-extrabold leading-[1.05] tracking-tight">
+				<span class="hero-title-line block text-2xl sm:text-4xl lg:text-5xl">Lechonería</span>
+				<span class="hero-title-line block text-3xl text-gold-400 sm:text-5xl lg:text-6xl">Chancho el Lechón</span>
+				<span class="hero-title-line mt-1 block text-lg font-bold text-cream-50/90 sm:text-xl lg:text-2xl">¡La del 7 de Agosto!</span>
+			</h1>
+		</div>
 
 		<div class="hero-pedestal-wrap relative mt-4 flex justify-center" tabindex="-1">
 			<div
-				class="hero-badge absolute -top-4 right-0 z-20 flex size-20 items-center justify-center rounded-full border-2 border-gold-400 bg-brand-900/80 text-center text-[0.6rem] font-bold uppercase leading-tight text-gold-400 shadow-xl sm:size-24 sm:text-xs"
+				class="hero-badge absolute -top-4 right-0 z-50 flex size-20 cursor-grab touch-none select-none items-center justify-center rounded-full border-2 border-gold-400 bg-brand-900/80 text-center text-xs font-bold uppercase leading-tight text-gold-400 shadow-xl active:cursor-grabbing sm:size-24 sm:text-sm"
 				aria-hidden="true"
 			>
-				<span>100%<br />Caleño<br />desde 2019</span>
+				<span>Desde<br />2019</span>
 			</div>
 
 			<div class="hero-pedestal relative h-56 w-[20rem] sm:h-72 sm:w-[30rem] lg:h-80 lg:w-[38rem]">
@@ -53,8 +73,8 @@ const rotationImages = [
 								alt={img.alt}
 								class={
 									img.framed
-										? 'hero-cutout absolute inset-x-8 top-0 bottom-4 mx-auto h-auto max-h-full w-auto rounded-[2rem] object-cover shadow-2xl ring-2 ring-gold-400/40'
-										: 'hero-cutout absolute inset-0 h-full w-full object-contain drop-shadow-2xl'
+										? 'hero-cutout absolute inset-x-8 top-0 bottom-4 mx-auto h-auto max-h-full w-auto rounded-[2rem] object-cover opacity-0 shadow-2xl ring-2 ring-gold-400/40'
+										: 'hero-cutout absolute inset-0 h-full w-full object-contain opacity-0 drop-shadow-2xl'
 								}
 								data-cutout-index={i}
 								data-zoom={img.zoom}
@@ -82,7 +102,7 @@ const rotationImages = [
 		type="button"
 		aria-pressed="false"
 		aria-label="Pausar rotación automática de imágenes"
-		class="hero-rotation-toggle absolute right-4 top-24 z-20 hidden size-9 items-center justify-center rounded-full border border-cream-50/30 bg-brand-900/50 text-cream-50 backdrop-blur-sm transition-colors hover:bg-brand-900/80 sm:flex"
+		class="hero-rotation-toggle absolute right-4 top-6 z-20 hidden size-9 items-center justify-center rounded-full border border-cream-50/30 bg-brand-900/50 text-cream-50 backdrop-blur-sm transition-colors hover:bg-brand-900/80 sm:flex"
 	>
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="hero-icon-pause size-4">
 			<rect x="6" y="5" width="4" height="14" rx="1"></rect>
@@ -107,19 +127,67 @@ const rotationImages = [
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { Draggable } from 'gsap/Draggable';
+	import { InertiaPlugin } from 'gsap/InertiaPlugin';
 
-	gsap.registerPlugin(ScrollTrigger);
+	gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin);
 
 	const mm = gsap.matchMedia();
 
 	const cutouts = gsap.utils.toArray<HTMLElement>('.hero-cutout');
 	const ROTATION_INTERVAL = 4;
 
+	// --- Page loader: covers the hero until assets are ready so half-loaded
+	// cutouts never flash stacked in the middle. Falls back after 3.5s.
+	const loader = document.getElementById('hero-loader');
+	const loaderDots = gsap.to('.hero-loader-dot', {
+		y: -10,
+		duration: 0.4,
+		yoyo: true,
+		repeat: -1,
+		stagger: 0.12,
+		ease: 'sine.inOut',
+	});
+	const loaderPulse = gsap.to('.hero-loader-logo', {
+		scale: 1.08,
+		duration: 0.8,
+		yoyo: true,
+		repeat: -1,
+		ease: 'sine.inOut',
+	});
+
+	let pageReady = false;
+	const readyCallbacks: Array<() => void> = [];
+	function whenReady(cb: () => void) {
+		pageReady ? cb() : readyCallbacks.push(cb);
+	}
+	function finishLoading() {
+		if (pageReady) return;
+		pageReady = true;
+		loaderDots.kill();
+		loaderPulse.kill();
+		gsap.to(loader, {
+			autoAlpha: 0,
+			scale: 1.06,
+			duration: 0.45,
+			ease: 'power2.inOut',
+			onComplete: () => loader?.remove(),
+		});
+		readyCallbacks.forEach((cb) => cb());
+	}
+	if (document.readyState === 'complete') {
+		finishLoading();
+	} else {
+		window.addEventListener('load', finishLoading);
+		setTimeout(finishLoading, 3500);
+	}
+
 	let currentIndex = 0;
 	let rotationTimer: gsap.core.Tween | null = null;
 	let manuallyPaused = false;
 	let hoverPaused = false;
-	const isPaused = () => manuallyPaused || hoverPaused;
+	let offscreen = false;
+	const isPaused = () => manuallyPaused || hoverPaused || offscreen || document.hidden;
 
 	// Carousel slots relative to the active image: center stage, dimmed
 	// side previews, and a hidden "backstage" slot new images emerge from.
@@ -180,6 +248,33 @@ const rotationImages = [
 		iconPlay?.classList.toggle('hidden', !manuallyPaused);
 	});
 
+	// Swipe / drag to advance the carousel manually (mouse or touch).
+	const stack = document.querySelector<HTMLElement>('.hero-cutout-stack');
+	if (stack) {
+		stack.style.touchAction = 'pan-y';
+		stack.style.cursor = 'grab';
+		stack.style.userSelect = 'none';
+		// Native image dragging swallows the pointerup that ends our swipe.
+		stack.addEventListener('dragstart', (e) => e.preventDefault());
+		let dragStartX: number | null = null;
+
+		stack.addEventListener('pointerdown', (e) => {
+			dragStartX = e.clientX;
+		});
+		window.addEventListener('pointerup', (e) => {
+			if (dragStartX === null) return;
+			const dx = e.clientX - dragStartX;
+			dragStartX = null;
+			if (Math.abs(dx) < 40 || cutouts.length < 2) return;
+			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+			const n = cutouts.length;
+			const next = dx < 0 ? (currentIndex + 1) % n : (currentIndex - 1 + n) % n;
+			layout(next, reduce ? 0.15 : 0.6, reduce ? 'none' : 'power2.out');
+			// Restart the auto-rotation clock so the manual pick gets full stage time.
+			rotationTimer?.restart(true);
+		});
+	}
+
 	const pedestalWrap = document.querySelector('.hero-pedestal-wrap');
 	pedestalWrap?.addEventListener('mouseenter', () => {
 		hoverPaused = true;
@@ -209,10 +304,10 @@ const rotationImages = [
 				// Rotation MUST keep advancing through all 4 images under reduced
 				// motion — only the crossfade tween itself is simplified to an
 				// instant/short opacity swap (no transform/slide/scale).
-				gsap.set('.hero-tag, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
+				gsap.set('.hero-logo, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
 					autoAlpha: 0,
 				});
-				gsap.to('.hero-tag, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
+				gsap.to('.hero-logo, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
 					autoAlpha: 1,
 					duration: 0.7,
 					stagger: 0.15,
@@ -236,15 +331,23 @@ const rotationImages = [
 				};
 			}
 
-			// Entrance timeline
-			const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 0.2 });
+			// Entrance timeline — plays once the loader clears, never over it.
+			// Hide everything up front so nothing flashes while waiting.
+			gsap.set('.hero-logo, .hero-title-line, .hero-pedestal-wrap, .hero-badge, .hero-cta', { autoAlpha: 0 });
+			const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, paused: true, delay: 0.15 });
 
-			tl.fromTo('.hero-tag', { autoAlpha: 0, y: -20 }, { autoAlpha: 1, y: 0, duration: 0.6 })
+			// Refined reveal: the logo resolves out of a soft blur while the
+			// name slides in beside it, line by line.
+			tl.fromTo(
+				'.hero-logo',
+				{ autoAlpha: 0, x: -50, scale: 0.85, filter: 'blur(12px)' },
+				{ autoAlpha: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out' }
+			)
 				.fromTo(
 					'.hero-title-line',
-					{ autoAlpha: 0, y: 70 },
-					{ autoAlpha: 1, y: 0, duration: 0.9, stagger: 0.18 },
-					'-=0.3'
+					{ autoAlpha: 0, x: 60 },
+					{ autoAlpha: 1, x: 0, duration: 0.9, stagger: 0.14, ease: 'power4.out' },
+					'-=0.75'
 				)
 				.fromTo(
 					'.hero-pedestal-wrap',
@@ -265,10 +368,14 @@ const rotationImages = [
 					'-=0.3'
 				);
 
+			whenReady(() => tl.play());
+
 			startRotation(0.8, 'power2.inOut');
 
+			const ambient: gsap.core.Tween[] = [];
+
 			// Ambient badge float
-			gsap.to('.hero-badge', {
+			const badgeFloat = gsap.to('.hero-badge', {
 				y: '+=8',
 				rotation: 4,
 				duration: 2.4,
@@ -277,28 +384,68 @@ const rotationImages = [
 				ease: 'sine.inOut',
 				delay: 2.2,
 			});
+			ambient.push(badgeFloat);
+
+			// The badge is a toy: grab it, throw it around the hero, and it
+			// lands with a springy bounce.
+			Draggable.create('.hero-badge', {
+				type: 'x,y',
+				bounds: '.hero-section',
+				inertia: true,
+				edgeResistance: 0.75,
+				onPress() {
+					badgeFloat.kill();
+					gsap.to(this.target, { scale: 1.15, duration: 0.2, ease: 'power2.out', overwrite: 'auto' });
+				},
+				onRelease() {
+					gsap.to(this.target, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.35)' });
+				},
+				onThrowComplete() {
+					gsap.fromTo(
+						this.target,
+						{ scaleX: 1.25, scaleY: 0.8 },
+						{ scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.3)' }
+					);
+				},
+			});
 
 			// Ambient particle drift (steam/spice feel)
 			gsap.utils.toArray<HTMLElement>('.hero-particle').forEach((particle, i) => {
-				gsap.to(particle, {
-					y: '+=18',
-					x: i % 2 === 0 ? '+=10' : '-=10',
-					opacity: 0.6,
-					duration: 3 + i * 0.6,
+				ambient.push(
+					gsap.to(particle, {
+						y: '+=18',
+						x: i % 2 === 0 ? '+=10' : '-=10',
+						opacity: 0.6,
+						duration: 3 + i * 0.6,
+						yoyo: true,
+						repeat: -1,
+						ease: 'sine.inOut',
+						delay: i * 0.4,
+					})
+				);
+			});
+
+			ambient.push(
+				gsap.to('.hero-glow', {
+					scale: 1.3,
+					opacity: 0.55,
+					duration: 3,
 					yoyo: true,
 					repeat: -1,
 					ease: 'sine.inOut',
-					delay: i * 0.4,
-				});
-			});
+				})
+			);
 
-			gsap.to('.hero-glow', {
-				scale: 1.3,
-				opacity: 0.55,
-				duration: 3,
-				yoyo: true,
-				repeat: -1,
-				ease: 'sine.inOut',
+			// Pause everything the moment the hero leaves the viewport so the
+			// browser isn't animating things nobody can see.
+			ScrollTrigger.create({
+				trigger: '#hero',
+				start: 'top bottom',
+				end: 'bottom top',
+				onToggle: (self) => {
+					offscreen = !self.isActive;
+					ambient.forEach((t) => (self.isActive ? t.play() : t.pause()));
+				},
 			});
 
 			// Second pin+scrub: Hero exit transition into the next section.
@@ -319,7 +466,7 @@ const rotationImages = [
 				})
 					.to('.hero-pedestal-wrap', { scale: 0.75, y: -30, duration: 1, ease: 'none' }, 0)
 					.to(
-						'.hero-title, .hero-tag, .hero-cta, .hero-badge, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
+						'.hero-title, .hero-logo-wrap, .hero-cta, .hero-badge, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
 						{ autoAlpha: 0, y: -60, duration: 0.8, ease: 'none' },
 						0
 					);

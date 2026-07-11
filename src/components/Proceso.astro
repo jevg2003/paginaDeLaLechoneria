@@ -65,26 +65,38 @@ const tiles = [
 		// Zoom origin = the center tile's midpoint, in PERCENT of the grid so
 		// it stays correct when the viewport resizes (mobile URL bar, rotation)
 		// — pixel origins went stale on refresh and left the grid off-screen.
+		// Focus point inside the center tile: horizontally centered, slightly
+		// above the midpoint so the framing favors the top of the photo.
+		const FX = 0.5;
+		const FY = 0.38;
+		let zoomScale = 3;
+
 		function setOrigin() {
 			const gridRect = grid.getBoundingClientRect();
 			const centerRect = center.getBoundingClientRect();
 			const scale = gsap.getProperty(grid, 'scaleX') as number;
-			const ox = ((centerRect.left - gridRect.left + centerRect.width / 2) / gridRect.width) * 100;
-			const oy = ((centerRect.top - gridRect.top + centerRect.height / 2) / gridRect.height) * 100;
-			if (scale === 1) gsap.set(grid, { transformOrigin: `${ox}% ${oy}%` });
+			if (scale !== 1) return;
+			const gx = centerRect.left - gridRect.left + centerRect.width * FX;
+			const gy = centerRect.top - gridRect.top + centerRect.height * FY;
+			gsap.set(grid, { transformOrigin: `${(gx / gridRect.width) * 100}% ${(gy / gridRect.height) * 100}%` });
+			// Minimum scale so the tile covers the whole viewport around that
+			// focus point — less shows the blue grid gaps, more over-magnifies
+			// the photo (and huge scales exceed mobile GPU texture limits).
+			zoomScale =
+				Math.max(
+					gx / (centerRect.width * FX),
+					(gridRect.width - gx) / (centerRect.width * (1 - FX)),
+					gy / (centerRect.height * FY),
+					(gridRect.height - gy) / (centerRect.height * (1 - FY))
+				) * 1.03;
 		}
 		setOrigin();
 		ScrollTrigger.addEventListener('refreshInit', setOrigin);
 
-		// Smaller zoom + shorter pin on mobile: a 3.4x scaled layer of large
-		// photos exceeds mobile GPU texture limits and renders as a blank.
 		const isMobile = window.matchMedia('(max-width: 767px)').matches;
-		const SCALE = isMobile ? 2.2 : 3.4;
-		const END = isMobile ? '+=1400' : '+=2400';
+		const END = isMobile ? '+=1900' : '+=3200';
 
 		gsap.set('.proceso-caption', { autoAlpha: 0, y: 30 });
-
-		const nav = document.getElementById('floating-nav');
 
 		const tl = gsap.timeline({
 			scrollTrigger: {
@@ -94,27 +106,29 @@ const tiles = [
 				pin: '.proceso-pin',
 				scrub: 1,
 				invalidateOnRefresh: true,
-				onToggle: (self) => {
-					gsap.to(nav, {
-						yPercent: self.isActive ? -180 : 0,
-						autoAlpha: self.isActive ? 0 : 1,
-						duration: 0.35,
-						ease: 'power2.out',
-						overwrite: 'auto',
-					});
-				},
 			},
 		});
 
-		tl.to(grid, { scale: SCALE, duration: 1, ease: ExpoScaleEase.config(1, SCALE) }, 0)
-			.to('.proceso-caption', { autoAlpha: 1, y: 0, duration: 0.15, ease: 'none' }, 0.82);
+		// Zoom takes most of the pin, then a dwell holds the framed shot so the
+		// section doesn't release abruptly right as the zoom finishes.
+		tl.to(grid, { scale: () => zoomScale, duration: 1, ease: ExpoScaleEase.config(1, zoomScale) }, 0)
+			.to('.proceso-caption', { autoAlpha: 1, y: 0, duration: 0.15, ease: 'none' }, 0.85)
+			.to({}, { duration: 0.12 });
 
-		gsap.to('.proceso-caption-arrow', {
+		const arrowTween = gsap.to('.proceso-caption-arrow', {
 			y: 8,
 			duration: 0.7,
 			yoyo: true,
 			repeat: -1,
 			ease: 'sine.inOut',
+		});
+
+		// Pause the arrow loop while the section is offscreen.
+		ScrollTrigger.create({
+			trigger: '.proceso-section',
+			start: 'top bottom',
+			end: 'bottom top',
+			onToggle: (self) => (self.isActive ? arrowTween.play() : arrowTween.pause()),
 		});
 
 		return () => {};
