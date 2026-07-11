@@ -3,9 +3,10 @@ import { PHONE_E164, PHONE_DISPLAY } from './contact';
 // Single source of truth for all SEO/social metadata: JSON-LD, Open Graph,
 // Twitter Cards, and the sitemap/robots generation all read from here.
 
-// TODO: update once the real production domain is decided (custom domain
-// or the renamed Vercel URL) — must match `site` in astro.config.mjs.
-export const SITE_URL = 'https://chancholechon.vercel.app';
+// TODO: update once a custom domain is bought, or once the Vercel project
+// is renamed to chancholechon (dashboard > Settings > General > Project
+// Name) — must match `site` in astro.config.mjs either way.
+export const SITE_URL = 'https://pagina-de-la-lechoneria.vercel.app';
 
 export const BUSINESS_NAME = 'Lechonería Chancho el Lechón';
 export const SITE_TITLE = `${BUSINESS_NAME} | Restaurante Cali`;
