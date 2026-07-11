@@ -47,10 +47,23 @@ const tiles = [
 	// that refresh ScrollTrigger mid-pin and make the zoom stutter/jump.
 	ScrollTrigger.config({ ignoreMobileResize: true });
 
+	// On touch devices, route scrolling through GSAP so momentum flings and
+	// address-bar quirks can't desync the pinned zoom on fast scrolls.
+	if (window.matchMedia('(hover: none), (pointer: coarse)').matches) {
+		ScrollTrigger.normalizeScroll(true);
+	}
+
 	const mm = gsap.matchMedia();
 
-	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
-		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+	mm.add(
+		{
+			reduceMotion: '(prefers-reduced-motion: reduce)',
+			okMotion: '(prefers-reduced-motion: no-preference)',
+			isMobile: '(max-width: 767px)',
+			isDesktop: '(min-width: 768px)',
+		},
+		(context) => {
+		const { reduceMotion, isMobile } = context.conditions as { reduceMotion: boolean; isMobile: boolean };
 
 		const grid = document.querySelector<HTMLElement>('.proceso-grid');
 		const center = document.querySelector<HTMLElement>('.proceso-tile-center');
@@ -97,10 +110,10 @@ const tiles = [
 		setOrigin();
 		ScrollTrigger.addEventListener('refreshInit', setOrigin);
 
-		const isMobile = window.matchMedia('(max-width: 767px)').matches;
 		const END = isMobile ? '+=1900' : '+=3200';
-		// Tighter scrub on touch: less catch-up lag feels more direct in hand.
-		const SCRUB = isMobile ? 0.5 : 1;
+		// Direct 1:1 scrub on touch: any catch-up lag builds a backlog during
+		// fast flings and reads as the zoom "freezing" then jumping.
+		const SCRUB = isMobile ? true : 1;
 
 		gsap.set('.proceso-caption', { autoAlpha: 0, y: 30 });
 
@@ -139,6 +152,13 @@ const tiles = [
 			onToggle: (self) => (self.isActive ? arrowTween.play() : arrowTween.pause()),
 		});
 
-		return () => {};
-	});
+		// Cleanup on breakpoint flip: drop the stale refreshInit listener and
+		// leftover inline transforms so the rebuilt pin starts clean.
+		return () => {
+			ScrollTrigger.removeEventListener('refreshInit', setOrigin);
+			gsap.set(grid, { clearProps: 'all' });
+			gsap.set('.proceso-caption', { clearProps: 'all' });
+		};
+		}
+	);
 </script>
