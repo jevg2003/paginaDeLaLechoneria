@@ -48,10 +48,10 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 			class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-700 px-4 py-16 md:h-screen md:w-screen md:py-0"
 		>
 			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
-				<span class="somos-shape somos-shape-ring somos-morph absolute left-[8%] top-[18%] size-24 bg-gold-400/40"></span>
-				<span class="somos-shape somos-shape-dot somos-morph absolute right-[12%] top-[25%] size-12 bg-gold-400/70"></span>
-				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[18%] right-[20%] size-16 bg-cream-50/30"></span>
-				<span class="somos-shape somos-shape-dot2 somos-morph absolute bottom-[30%] left-[15%] size-10 bg-cream-50/50"></span>
+				<span class="somos-shape somos-shape-ring somos-morph absolute left-[8%] top-[10%] size-14 bg-gold-400/40 opacity-40 md:top-[18%] md:size-24 md:opacity-100"></span>
+				<span class="somos-shape somos-shape-dot somos-morph absolute right-[12%] top-[16%] size-8 bg-gold-400/70 opacity-40 md:top-[25%] md:size-12 md:opacity-100"></span>
+				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[10%] right-[20%] size-10 bg-cream-50/30 opacity-40 md:bottom-[18%] md:size-16 md:opacity-100"></span>
+				<span class="somos-shape somos-shape-dot2 somos-morph absolute bottom-[16%] left-[15%] size-7 bg-cream-50/50 opacity-40 md:bottom-[30%] md:size-10 md:opacity-100"></span>
 			</div>
 			<div class="somos-inner relative z-10 mx-auto max-w-4xl">
 				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Misión</h2>
@@ -67,10 +67,10 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 
 		<article class="somos-panel relative flex min-h-[70vh] w-full items-center overflow-hidden bg-brand-900 px-4 py-16 md:h-screen md:w-screen md:py-0">
 			<div class="pointer-events-none absolute inset-0" aria-hidden="true">
-				<span class="somos-shape somos-shape-ring somos-morph absolute right-[10%] top-[15%] size-28 bg-gold-400/30"></span>
-				<span class="somos-shape somos-shape-cross absolute left-[10%] top-[30%] text-4xl font-black text-gold-400/50">+</span>
-				<span class="somos-shape somos-shape-dot somos-morph absolute bottom-[22%] left-[22%] size-12 bg-gold-400/60"></span>
-				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[15%] right-[15%] size-14 bg-cream-50/25"></span>
+				<span class="somos-shape somos-shape-ring somos-morph absolute right-[10%] top-[8%] size-16 bg-gold-400/30 opacity-40 md:top-[15%] md:size-28 md:opacity-100"></span>
+				<span class="somos-shape somos-shape-cross absolute left-[10%] top-[14%] text-2xl font-black text-gold-400/50 opacity-40 md:top-[30%] md:text-4xl md:opacity-100">+</span>
+				<span class="somos-shape somos-shape-dot somos-morph absolute bottom-[14%] left-[22%] size-8 bg-gold-400/60 opacity-40 md:bottom-[22%] md:size-12 md:opacity-100"></span>
+				<span class="somos-shape somos-shape-square somos-morph absolute bottom-[8%] right-[15%] size-9 bg-cream-50/25 opacity-40 md:bottom-[15%] md:size-14 md:opacity-100"></span>
 			</div>
 			<div class="somos-inner relative z-10 mx-auto max-w-4xl">
 				<h2 class="text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">Visión</h2>
@@ -244,10 +244,16 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 					gsap.to(shape, { [best.axis]: `+=${best.v}`, duration: 0.65, ease: 'back.out(1.8)' });
 				}
 
+				// Dragging is desktop-pointer only: on touch screens a draggable
+				// shape (touch-action: none) would swallow scroll gestures.
+				const canDrag = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
 				allShapes.forEach((shape) => {
-					shape.style.pointerEvents = 'auto';
-					shape.style.cursor = 'grab';
-					shape.style.touchAction = 'none';
+					if (canDrag) {
+						shape.style.pointerEvents = 'auto';
+						shape.style.cursor = 'grab';
+						shape.style.touchAction = 'none';
+					}
 					const panel = shape.closest<HTMLElement>('.somos-panel')!;
 
 					// Idle wander: small random strolls, re-rolled on every repeat.
@@ -259,7 +265,9 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 						ease: 'sine.inOut',
 						repeat: -1,
 						repeatRefresh: true,
-						onRepeat: () => expelFromText(shape),
+						// On touch screens the faint shapes may drift behind the
+						// text — that's fine there, so only desktop expels them.
+						onRepeat: () => canDrag && expelFromText(shape),
 					});
 					wanderOf.set(shape, wander);
 					idleTweens.push(wander);
@@ -275,6 +283,8 @@ import somosImg from '../assets/images/lechona-entera-horneada.png';
 						});
 						idleTweens.push(morph);
 					}
+
+					if (!canDrag) return;
 
 					Draggable.create(shape, {
 						type: 'x,y',

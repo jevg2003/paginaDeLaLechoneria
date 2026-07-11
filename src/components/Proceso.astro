@@ -43,6 +43,10 @@ const tiles = [
 
 	gsap.registerPlugin(ScrollTrigger, ExpoScaleEase);
 
+	// Mobile browsers show/hide the URL bar while scrolling, firing resizes
+	// that refresh ScrollTrigger mid-pin and make the zoom stutter/jump.
+	ScrollTrigger.config({ ignoreMobileResize: true });
+
 	const mm = gsap.matchMedia();
 
 	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
@@ -95,6 +99,8 @@ const tiles = [
 
 		const isMobile = window.matchMedia('(max-width: 767px)').matches;
 		const END = isMobile ? '+=1900' : '+=3200';
+		// Tighter scrub on touch: less catch-up lag feels more direct in hand.
+		const SCRUB = isMobile ? 0.5 : 1;
 
 		gsap.set('.proceso-caption', { autoAlpha: 0, y: 30 });
 
@@ -104,7 +110,9 @@ const tiles = [
 				start: 'top top',
 				end: END,
 				pin: '.proceso-pin',
-				scrub: 1,
+				scrub: SCRUB,
+				anticipatePin: 1,
+				fastScrollEnd: true,
 				invalidateOnRefresh: true,
 			},
 		});
