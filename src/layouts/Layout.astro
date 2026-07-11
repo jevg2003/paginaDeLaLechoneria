@@ -3,9 +3,13 @@ import '../styles/global.css';
 
 interface Props {
 	title?: string;
+	description?: string;
 }
 
-const { title = 'Lechonería Chancho el Lechón' } = Astro.props;
+const {
+	title = 'Lechonería Chancho el Lechón',
+	description = 'La mejor lechona de Cali: lechona tolimense, cojines, tamales y pernil con cuero súper crocante. Barrio 7 de Agosto — pedidos y cotizaciones por WhatsApp.',
+} = Astro.props;
 ---
 
 <html lang="es">
@@ -14,6 +18,7 @@ const { title = 'Lechonería Chancho el Lechón' } = Astro.props;
 		<link rel="icon" type="image/webp" href="/favicon.webp" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
+		<meta name="description" content={description} />
 		<title>{title}</title>
 	</head>
 	<body>
