@@ -4,21 +4,17 @@ import sharp from 'sharp';
 import pngToIco from 'png-to-ico';
 import { writeFile } from 'node:fs/promises';
 
-const BRAND_BLUE = '#004aad';
-const LOGO = 'public/media/logoChanchoLechon3.webp';
+const TRANSPARENT = { r: 0, g: 0, b: 0, alpha: 0 };
+// Higher-res, cleanly-cut mascot art (no background baked in) — used only
+// for the generated icon/favicon set below.
+const LOGO = 'public/media/logo-mascota-sin-fondo.webp';
 const OG_SOURCE = 'public/media/img/img10.jpg';
 
+// Just the pig mascot, no background square — the logo's own alpha channel
+// (it's already a cutout) does the work.
 async function squareIcon(size, outPath) {
 	await sharp(LOGO)
-		.resize(Math.round(size * 0.8), Math.round(size * 0.8), { fit: 'contain', background: BRAND_BLUE })
-		.extend({
-			top: Math.round(size * 0.1),
-			bottom: Math.round(size * 0.1),
-			left: Math.round(size * 0.1),
-			right: Math.round(size * 0.1),
-			background: BRAND_BLUE,
-		})
-		.resize(size, size)
+		.resize(size, size, { fit: 'contain', background: TRANSPARENT })
 		.png()
 		.toFile(outPath);
 	console.log('wrote', outPath, `${size}x${size}`);
