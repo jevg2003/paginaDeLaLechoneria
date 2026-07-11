@@ -2,14 +2,34 @@
 import { WHATSAPP_URL } from '../lib/contact';
 ---
 
-<section id="final" class="bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 text-cream-50">
-	<div class="cta-final-content mx-auto max-w-6xl px-4 py-20 text-center flex flex-col items-center gap-8">
-		<h2 class="text-3xl sm:text-4xl font-extrabold">¿Listo Para Realizar<br />Su Pedido?</h2>
-		<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-			<button class="bg-gold-500 hover:bg-gold-600 text-brand-900 font-bold text-lg px-8 py-4 rounded-full shadow-lg transition-colors cursor-pointer">
-				¡Realiza tu Pedido!
-			</button>
-		</a>
+<section id="final" class="relative overflow-hidden bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 text-cream-50">
+	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
+		<span class="cta-glow absolute left-1/2 top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400/10 blur-3xl"></span>
+	</div>
+
+	<div class="cta-final-content relative mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-24 text-center sm:py-32">
+		<h2 class="cta-title text-4xl font-extrabold leading-tight sm:text-5xl lg:text-6xl">
+			¿Listo para realizar <span class="text-gold-400">tu pedido?</span>
+		</h2>
+		<p class="cta-sub max-w-xl text-lg text-cream-50/80">
+			Escríbenos por WhatsApp y te cotizamos de una — lechona, cojines, tamales y más.
+		</p>
+
+		<div class="cta-magnet-zone mt-4 p-10">
+			<a
+				href={WHATSAPP_URL}
+				target="_blank"
+				rel="noopener noreferrer"
+				class="cta-magnet-btn inline-flex items-center gap-3 rounded-full bg-gold-500 px-10 py-5 text-xl font-extrabold text-brand-900 shadow-2xl will-change-transform hover:bg-gold-600"
+			>
+				<span class="cta-magnet-label inline-flex items-center gap-3">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" class="size-7">
+						<path d="M16.004 3C9.377 3 4 8.377 4 15.004c0 2.523.703 4.883 1.921 6.898L4 29l7.264-1.9a11.94 11.94 0 0 0 4.74.973h.001c6.626 0 12.003-5.377 12.003-12.004C28.008 8.377 22.63 3 16.004 3Z" />
+					</svg>
+					¡Realiza tu Pedido!
+				</span>
+			</a>
+		</div>
 	</div>
 </section>
 
@@ -21,24 +41,66 @@ import { WHATSAPP_URL } from '../lib/contact';
 
 	const mm = gsap.matchMedia();
 
-	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
-		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+	mm.add(
+		{
+			reduceMotion: '(prefers-reduced-motion: reduce)',
+			okMotion: '(prefers-reduced-motion: no-preference)',
+			canHover: '(hover: hover) and (pointer: fine)',
+			noHover: '(hover: none), (pointer: coarse)',
+		},
+		(context) => {
+			const { reduceMotion, canHover } = context.conditions as { reduceMotion: boolean; canHover: boolean };
 
-		gsap.fromTo(
-			'.cta-final-content',
-			{ scale: reduceMotion ? 1 : 0.9 },
-			{
-				scale: 1,
-				ease: 'none',
-				scrollTrigger: {
-					trigger: '#final',
-					start: 'top bottom',
-					end: 'center center',
-					scrub: reduceMotion ? false : true,
-				},
+			// Entrance
+			if (reduceMotion) {
+				gsap.from('.cta-final-content', {
+					autoAlpha: 0,
+					duration: 0.3,
+					scrollTrigger: { trigger: '#final', start: 'top 75%', toggleActions: 'play none none none' },
+				});
+			} else {
+				gsap
+					.timeline({
+						scrollTrigger: { trigger: '#final', start: 'top 70%', toggleActions: 'play none none none' },
+						defaults: { ease: 'power3.out' },
+					})
+					.from('.cta-title', { autoAlpha: 0, y: 40, duration: 0.7 })
+					.from('.cta-sub', { autoAlpha: 0, y: 30, duration: 0.6 }, '-=0.45')
+					.from('.cta-magnet-btn', { autoAlpha: 0, scale: 0.6, duration: 0.7, ease: 'back.out(1.8)' }, '-=0.35');
+
+				gsap.to('.cta-glow', {
+					scale: 1.25,
+					opacity: 0.7,
+					duration: 3,
+					yoyo: true,
+					repeat: -1,
+					ease: 'sine.inOut',
+					scrollTrigger: { trigger: '#final', start: 'top bottom', end: 'bottom top', toggleActions: 'play pause resume pause' },
+				});
 			}
-		);
 
-		return () => {};
-	});
+			// Magnetic button (desktop pointers only): the button leans toward
+			// the cursor inside the zone and springs back elastically on leave.
+			if (!reduceMotion && canHover) {
+				const zone = document.querySelector<HTMLElement>('.cta-magnet-zone')!;
+				const btn = document.querySelector<HTMLElement>('.cta-magnet-btn')!;
+				const label = document.querySelector<HTMLElement>('.cta-magnet-label')!;
+
+				zone.addEventListener('mousemove', (e) => {
+					const r = zone.getBoundingClientRect();
+					const relX = e.clientX - r.left - r.width / 2;
+					const relY = e.clientY - r.top - r.height / 2;
+					gsap.to(btn, { x: relX * 0.45, y: relY * 0.45, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
+					// The label chases a bit further for a layered, liquid feel.
+					gsap.to(label, { x: relX * 0.18, y: relY * 0.18, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
+				});
+
+				zone.addEventListener('mouseleave', () => {
+					gsap.to([btn, label], { x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' });
+				});
+			}
+
+			return () => {};
+		}
+	);
 </script>

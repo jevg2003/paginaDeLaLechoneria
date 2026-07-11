@@ -28,7 +28,7 @@ const products = [
 	{
 		id: 'cajas-detal',
 		name: 'Cajas de Lechona al Detal',
-		image: '/media/racion-lechona-detalle.webp',
+		image: '/media/racion-lechona-detalle.jpg',
 		info: 'Raciones individuales en caja con arepa y cuero, listas para servir. Ventas al detal aquí en nuestro local.',
 		message: 'Hola! Me interesa una Caja de Lechona al Detal. ¿Podrían darme más información?',
 	},
@@ -73,10 +73,9 @@ const products = [
 <section id="nuestros-productos" class="py-16 sm:py-20 bg-cream-50">
 	<div class="w-full px-4 sm:px-8">
 		<div class="mx-auto max-w-3xl text-center">
-			<span class="eyebrow-label">El menú de la casa</span>
 			<h2 class="editorial-heading mb-2">¡Nuestros Productos!</h2>
 			<p class="mb-10 text-lg font-semibold text-brand-600">
-				Toca cada foto para conocer el producto y pedir tu cotización 👇
+				Toca cada foto para conocer el producto y pedir tu cotización
 			</p>
 		</div>
 
@@ -118,8 +117,9 @@ const products = [
 			×
 		</button>
 		<div class="producto-modal-media h-64 w-full sm:h-80"></div>
-		<div class="p-6 sm:p-8">
+		<div class="producto-modal-body p-6 sm:p-8">
 			<h3 id="producto-modal-title" class="text-2xl font-extrabold text-brand-800 sm:text-3xl"></h3>
+			<span class="producto-modal-bar mt-2 block h-1 w-16 origin-left rounded bg-gold-500"></span>
 			<p class="producto-modal-info mt-3 leading-relaxed text-brand-900/80"></p>
 			<a
 				class="producto-modal-cta mt-6 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-4 text-lg font-bold text-brand-900 shadow-lg transition-transform hover:scale-105 hover:bg-gold-600"
@@ -219,15 +219,37 @@ const products = [
 		info.textContent = d.info;
 		cta.href = `https://wa.me/${(window as any).__waNumber}?text=${encodeURIComponent(d.message)}`;
 
-		const contentEls = modalBox.querySelectorAll('h3, .producto-modal-info, .producto-modal-cta');
-		const flipDur = reduceMotion ? 0.15 : 0.6;
+		const titleEl = modalBox.querySelector('h3')!;
+		const barEl = modalBox.querySelector('.producto-modal-bar')!;
+		const infoEl = modalBox.querySelector('.producto-modal-info')!;
+		const flipDur = reduceMotion ? 0.15 : 0.55;
 
-		// One connected sequence: backdrop fades in while the image flies,
-		// and the text only appears once the image has landed.
-		gsap.set(contentEls, { autoAlpha: 0, y: reduceMotion ? 0 : 20 });
+		// The card's name label and "+" hint would linger in the hole the
+		// photo leaves behind — tuck them away for the trip.
+		gsap.to(card.querySelector('span'), { autoAlpha: 0, duration: 0.15 });
+
+		// Act 1: ONLY the photo flies from its card — backdrop and white panel
+		// stay invisible so nothing appears before the image. Act 2: once it
+		// lands, the backdrop dims and the panel materializes. Act 3: the info
+		// cascades in — title, gold bar, description, CTA popping last.
+		gsap.set([titleEl, infoEl, cta], {
+			autoAlpha: 0,
+			y: reduceMotion ? 0 : 26,
+			filter: reduceMotion ? 'none' : 'blur(6px)',
+		});
+		gsap.set(barEl, { scaleX: 0 });
 		modal.classList.remove('hidden');
 		modal.classList.add('flex');
-		gsap.fromTo(modal, { autoAlpha: 0 }, { autoAlpha: 1, duration: reduceMotion ? 0.1 : 0.3 });
+
+		// Remember the styled backdrop/panel looks, then blank them for Act 1.
+		const body = modalBox.querySelector<HTMLElement>('.producto-modal-body')!;
+		const modalBg = getComputedStyle(modal).backgroundColor;
+		const boxBg = getComputedStyle(modalBox).backgroundColor;
+		const boxShadow = getComputedStyle(modalBox).boxShadow;
+		gsap.set(modal, { autoAlpha: 1, backgroundColor: 'rgba(0,0,0,0)', backdropFilter: 'blur(0px)' });
+		gsap.set(modalBox, { backgroundColor: 'rgba(0,0,0,0)', boxShadow: 'none' });
+		gsap.set(body, { clipPath: 'inset(0% 0% 100% 0%)' });
+		gsap.set(closeBtn, { autoAlpha: 0 });
 
 		const state = Flip.getState(img);
 		media.appendChild(img);
@@ -235,17 +257,41 @@ const products = [
 
 		Flip.from(state, {
 			duration: flipDur,
-			ease: reduceMotion ? 'none' : 'power2.inOut',
+			ease: reduceMotion ? 'none' : 'power3.out',
 			absolute: true,
 			onComplete: () => {
-				gsap.to(contentEls, {
-					autoAlpha: 1,
-					y: 0,
-					duration: reduceMotion ? 0.15 : 0.4,
-					stagger: reduceMotion ? 0 : 0.08,
-				});
+				if (reduceMotion) {
+					gsap.to(modal, { backgroundColor: modalBg, duration: 0.15 });
+					gsap.to(modalBox, { backgroundColor: boxBg, boxShadow, duration: 0.15 });
+					gsap.set(body, { clipPath: 'inset(0% 0% 0% 0%)' });
+					gsap.to([titleEl, infoEl, cta, closeBtn], { autoAlpha: 1, duration: 0.15 });
+					gsap.to(barEl, { scaleX: 1, duration: 0.15 });
+				}
 			},
 		});
+
+		// The panel doesn't wait for the landing: right as the photo is about
+		// to touch down, the backdrop dims and the white body UNFOLDS from
+		// behind the image — one continuous, overlapping motion.
+		if (!reduceMotion) {
+			gsap.delayedCall(flipDur * 0.55, () => {
+				gsap
+					.timeline({ defaults: { ease: 'power3.out' } })
+					.to(modal, { backgroundColor: modalBg, backdropFilter: 'blur(4px)', duration: 0.25, ease: 'power1.inOut' })
+					.to(modalBox, { backgroundColor: boxBg, boxShadow, duration: 0.22, ease: 'power1.inOut' }, '<')
+					.to(body, { clipPath: 'inset(0% 0% 0% 0%)', duration: 0.35, ease: 'power3.inOut' }, '<0.03')
+					.to(closeBtn, { autoAlpha: 1, duration: 0.2 }, '-=0.28')
+					.to(titleEl, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.28 }, '-=0.24')
+					.to(barEl, { scaleX: 1, duration: 0.25, ease: 'power2.inOut' }, '-=0.2')
+					.to(infoEl, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.28 }, '-=0.2')
+					.fromTo(
+						cta,
+						{ autoAlpha: 0, y: 18, scale: 0.9 },
+						{ autoAlpha: 1, y: 0, scale: 1, filter: 'blur(0px)', duration: 0.32, ease: 'back.out(1.8)' },
+						'-=0.16'
+					);
+			});
+		}
 
 		closeBtn.focus();
 		document.addEventListener('keydown', onKeydown);
@@ -260,14 +306,14 @@ const products = [
 		movedImg = null;
 		document.removeEventListener('keydown', onKeydown);
 
-		const contentEls = modalBox.querySelectorAll('h3, .producto-modal-info, .producto-modal-cta');
-		const flipDur = reduceMotion ? 0.1 : 0.5;
+		const contentEls = modalBox.querySelectorAll('h3, .producto-modal-bar, .producto-modal-info, .producto-modal-cta');
+		const flipDur = reduceMotion ? 0.1 : 0.4;
 
 		// Reverse choreography: text tucks away first, then the image flies
 		// home while the backdrop fades out with it — nothing lingers.
-		gsap.to(contentEls, { autoAlpha: 0, y: reduceMotion ? 0 : 10, duration: reduceMotion ? 0.08 : 0.18 });
+		gsap.to(contentEls, { autoAlpha: 0, y: reduceMotion ? 0 : 10, duration: reduceMotion ? 0.08 : 0.12 });
 
-		gsap.delayedCall(reduceMotion ? 0.05 : 0.15, () => {
+		gsap.delayedCall(reduceMotion ? 0.05 : 0.08, () => {
 			const state = Flip.getState(img);
 			card.insertBefore(img, card.firstChild);
 
@@ -278,6 +324,7 @@ const products = [
 				onComplete: () => {
 					modal.classList.add('hidden');
 					modal.classList.remove('flex');
+					gsap.to(card.querySelector('span'), { autoAlpha: 1, duration: 0.25 });
 					card.focus();
 				},
 			});

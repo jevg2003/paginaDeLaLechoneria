@@ -466,7 +466,10 @@ const rotationImages = [
 				})
 					.to('.hero-pedestal-wrap', { scale: 0.75, y: -30, duration: 1, ease: 'none' }, 0)
 					.to(
-						'.hero-title, .hero-logo-wrap, .hero-cta, .hero-badge, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
+						// The badge is deliberately NOT in this list: exit-fading it
+						// fought its float/drag tweens and could leave it invisible
+						// after scrolling back or reloading mid-page.
+						'.hero-title, .hero-logo-wrap, .hero-cta, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
 						{ autoAlpha: 0, y: -60, duration: 0.8, ease: 'none' },
 						0
 					);

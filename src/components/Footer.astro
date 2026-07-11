@@ -1,58 +1,82 @@
 ---
-import { Image } from 'astro:assets';
-import { PHONE_DISPLAY, PHONE_TEL_HREF } from '../lib/contact';
-import decorativePig from '../assets/images/pendiente-decorativo-cerdo-cuero.png';
+import { PHONE_DISPLAY, PHONE_TEL_HREF, WHATSAPP_URL } from '../lib/contact';
+
+const year = new Date().getFullYear();
+
+const siteLinks = [
+	{ label: 'Inicio', href: '#hero' },
+	{ label: 'Quiénes Somos', href: '#somos-chancho' },
+	{ label: 'Nuestros Productos', href: '#nuestros-productos' },
+	{ label: 'Ubícanos', href: '#ubicanos' },
+];
+
+const legalLinks = [
+	{ label: 'Términos y Condiciones', href: '/terminos' },
+	{ label: 'Política de Privacidad', href: '/politica-de-privacidad' },
+];
 ---
 
-<footer class="footer-section relative overflow-hidden bg-brand-900 text-cream-50">
-	<Image
-		src={decorativePig}
-		alt=""
-		aria-hidden="true"
-		widths={[200, 320]}
-		sizes="(min-width: 640px) 128px, 96px"
-		class="footer-decorative-pig pointer-events-none absolute bottom-0 left-4 w-24 sm:w-32 select-none"
-	/>
+<footer class="footer-section bg-brand-900 text-cream-50">
+	<div class="mx-auto max-w-6xl px-4 py-14">
+		<div class="grid gap-10 text-center sm:text-left md:grid-cols-4">
+			<div class="md:col-span-2">
+				<a href="#hero" class="inline-flex items-center gap-3">
+					<img src="/media/logoChanchoLechon3.webp" alt="Logo de Lechonería Chancho el Lechón" class="h-14 w-auto" />
+					<span class="text-left text-lg font-extrabold leading-tight">
+						Lechonería<br />
+						<span class="text-gold-400">Chancho el Lechón</span>
+					</span>
+				</a>
+				<p class="mt-4 max-w-sm text-sm leading-relaxed text-cream-50/70 sm:mx-0">
+					La mejor lechona de Cali, con cuero súper crocante y sazón de casa. ¡La del 7 de Agosto, desde 2019!
+				</p>
+			</div>
 
-	<div class="relative mx-auto max-w-6xl px-4 py-10 flex flex-col items-center gap-4 text-center">
-		<h3 class="text-xl font-bold">Encuéntranos</h3>
-		<p class="leading-relaxed">
-			7 de agosto<br />
-			Diag 15 #71A-58<br />
-			<span class="inline-flex items-center gap-2 justify-center mt-1">
-				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-					<path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1V20a1 1 0 0 1-1 1C10.61 21 3 13.39 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2Z" />
-				</svg>
-				<a href={PHONE_TEL_HREF} class="hover:text-gold-400 transition-colors">{PHONE_DISPLAY}</a>
-			</span>
-		</p>
-		<p class="text-cream-50/70 text-sm">© Lechonería Chancho el Lechón 2023</p>
+			<div>
+				<h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-gold-400">Explora</h3>
+				<ul class="space-y-2 text-sm">
+					{
+						siteLinks.map((l) => (
+							<li>
+								<a href={l.href} class="text-cream-50/80 transition-colors hover:text-gold-400">
+									{l.label}
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<div>
+				<h3 class="mb-3 text-sm font-bold uppercase tracking-wider text-gold-400">Contacto</h3>
+				<ul class="space-y-2 text-sm text-cream-50/80">
+					<li>Barrio 7 de Agosto</li>
+					<li>Diag 15 #71A-58, Cali</li>
+					<li>
+						<a href={PHONE_TEL_HREF} class="transition-colors hover:text-gold-400">{PHONE_DISPLAY}</a>
+					</li>
+					<li>
+						<a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-gold-400">
+							WhatsApp
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="mt-12 flex flex-col items-center gap-3 border-t border-cream-50/10 pt-6 text-sm text-cream-50/60 sm:flex-row sm:justify-between">
+			<p>© {year} Lechonería Chancho el Lechón. Todos los derechos reservados.</p>
+			<ul class="flex flex-wrap items-center justify-center gap-x-6 gap-y-1">
+				{
+					legalLinks.map((l) => (
+						<li>
+							<a href={l.href} class="transition-colors hover:text-gold-400">
+								{l.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</div>
 	</div>
 </footer>
-
-<script>
-	import gsap from 'gsap';
-
-	const mm = gsap.matchMedia();
-
-	mm.add({ reduceMotion: '(prefers-reduced-motion: reduce)', okMotion: '(prefers-reduced-motion: no-preference)' }, (context) => {
-		const { reduceMotion } = context.conditions as { reduceMotion: boolean };
-		const pig = document.querySelector<HTMLElement>('.footer-decorative-pig');
-		if (!pig) return () => {};
-
-		if (reduceMotion) {
-			gsap.set(pig, { autoAlpha: 1, y: 0 });
-			return () => {};
-		}
-
-		const tween = gsap.to(pig, {
-			y: -10,
-			duration: 2.4,
-			ease: 'sine.inOut',
-			repeat: -1,
-			yoyo: true,
-		});
-
-		return () => tween.kill();
-	});
-</script>

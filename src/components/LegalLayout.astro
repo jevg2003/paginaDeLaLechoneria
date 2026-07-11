@@ -1,0 +1,62 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+interface Props {
+	title: string;
+	heading: string;
+	updated: string;
+}
+
+const { title, heading, updated } = Astro.props;
+---
+
+<Layout title={title}>
+	<header class="bg-brand-800 text-cream-50">
+		<div class="mx-auto flex max-w-4xl items-center justify-between px-4 py-5">
+			<a href="/" class="inline-flex items-center gap-3" aria-label="Volver al inicio">
+				<img src="/media/logoChanchoLechon3.webp" alt="Logo de Lechonería Chancho el Lechón" class="h-12 w-auto" />
+				<span class="text-sm font-extrabold leading-tight sm:text-base">
+					Lechonería<br />
+					<span class="text-gold-400">Chancho el Lechón</span>
+				</span>
+			</a>
+			<a
+				href="/"
+				class="inline-flex items-center gap-2 rounded-full border border-cream-50/30 px-4 py-2 text-sm font-bold transition-colors hover:border-gold-400 hover:text-gold-400"
+			>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="size-4">
+					<line x1="19" y1="12" x2="5" y2="12"></line>
+					<polyline points="12 19 5 12 12 5"></polyline>
+				</svg>
+				Volver al inicio
+			</a>
+		</div>
+	</header>
+
+	<main class="bg-cream-50 py-12 text-brand-900 sm:py-16">
+		<article class="mx-auto max-w-3xl px-4">
+			<h1 class="text-3xl font-extrabold text-brand-800 sm:text-4xl">{heading}</h1>
+			<p class="mt-2 text-sm text-brand-900/60">Última actualización: {updated}</p>
+			<div class="legal-content mt-8 space-y-6 leading-relaxed text-brand-900/85">
+				<slot />
+			</div>
+		</article>
+	</main>
+
+	<footer class="bg-brand-900 py-6 text-center text-sm text-cream-50/60">
+		<p>© {new Date().getFullYear()} Lechonería Chancho el Lechón · <a href="/" class="hover:text-gold-400">Inicio</a></p>
+	</footer>
+</Layout>
+
+<style is:global>
+	.legal-content h2 {
+		font-size: 1.25rem;
+		font-weight: 800;
+		color: var(--color-brand-800, #003a8c);
+		margin-top: 2rem;
+	}
+	.legal-content ul {
+		list-style: disc;
+		padding-left: 1.5rem;
+	}
+</style>

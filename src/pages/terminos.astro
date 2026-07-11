@@ -1,0 +1,59 @@
+---
+import LegalLayout from '../components/LegalLayout.astro';
+import { PHONE_DISPLAY } from '../lib/contact';
+---
+
+<LegalLayout
+	title="Términos y Condiciones — Lechonería Chancho el Lechón"
+	heading="Términos y Condiciones"
+	updated="julio de 2026"
+>
+	<p>
+		Bienvenido al sitio web de <strong>Lechonería Chancho el Lechón</strong>, empresa caleña dedicada a la
+		preparación y venta de lechona tradicional y productos derivados. Al usar este sitio aceptas los siguientes
+		términos y condiciones.
+	</p>
+
+	<h2>1. Uso del sitio</h2>
+	<p>
+		Este sitio tiene fines informativos: presentar nuestros productos, ubicación, horarios y canales de contacto.
+		No procesamos pagos ni ventas directamente a través de la página.
+	</p>
+
+	<h2>2. Pedidos y cotizaciones</h2>
+	<ul>
+		<li>Los pedidos y cotizaciones se realizan a través de WhatsApp o vía telefónica ({PHONE_DISPLAY}).</li>
+		<li>Los precios se confirman al momento de la cotización y pueden variar según el tamaño del pedido, la fecha y la disponibilidad.</li>
+		<li>Toda cotización es informativa hasta que confirmemos el pedido directamente contigo.</li>
+	</ul>
+
+	<h2>3. Disponibilidad del producto</h2>
+	<p>
+		La venta de lechona en el local se realiza los sábados y domingos hasta agotar existencias. Recomendamos
+		escribirnos o llamarnos antes de visitarnos para confirmar disponibilidad.
+	</p>
+
+	<h2>4. Propiedad intelectual</h2>
+	<p>
+		El nombre, el logo, las fotografías y los contenidos de este sitio son propiedad de Lechonería Chancho el
+		Lechón. No está permitido su uso o reproducción sin autorización previa.
+	</p>
+
+	<h2>5. Enlaces a terceros</h2>
+	<p>
+		El sitio contiene enlaces a servicios de terceros (WhatsApp, Google Maps, Facebook e Instagram). No somos
+		responsables del contenido ni de las políticas de esos servicios.
+	</p>
+
+	<h2>6. Cambios a estos términos</h2>
+	<p>
+		Podemos actualizar estos términos en cualquier momento. La versión vigente será siempre la publicada en esta
+		página.
+	</p>
+
+	<h2>7. Contacto</h2>
+	<p>
+		Para cualquier duda sobre estos términos, escríbenos por WhatsApp o llámanos al {PHONE_DISPLAY}. Estamos en el
+		Barrio 7 de Agosto, Diag 15 #71A-58, Santiago de Cali.
+	</p>
+</LegalLayout>
