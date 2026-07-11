@@ -3,6 +3,6 @@ export const PHONE_DISPLAY = '+57 312 8839301';
 export const PHONE_TEL_HREF = `tel:${PHONE_E164}`;
 
 const WHATSAPP_MESSAGE =
-	'Hola, me interesa saber más sobre sus productos. ¿Podrían compartirme información detallada? Gracias!';
+	'¡Hola! Los vi en la página y me llamó mucho la atención la lechona 🐷 ¿Me pueden cotizar y dar más información sobre los productos? ¡Gracias!';
 
 export const WHATSAPP_URL = `https://wa.me/${PHONE_E164.replace('+', '')}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
