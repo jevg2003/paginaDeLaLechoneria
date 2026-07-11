@@ -1,0 +1,20 @@
+---
+interface Props {
+	/** Tailwind size classes for the <svg>, e.g. "size-6" or "relative size-8 drop-shadow". */
+	class?: string;
+	/** Full glyph with the phone-handset detail inside the bubble (used where
+	 * the icon stands alone, e.g. floating buttons/cards). Plain bubble
+	 * outline otherwise (used inline next to a text label). */
+	detailed?: boolean;
+}
+
+const { class: className = 'size-6', detailed = false } = Astro.props;
+
+const BUBBLE = 'M16.004 3C9.377 3 4 8.377 4 15.004c0 2.523.703 4.883 1.921 6.898L4 29l7.264-1.9a11.94 11.94 0 0 0 4.74.973h.001c6.626 0 12.003-5.377 12.003-12.004C28.008 8.377 22.63 3 16.004 3Z';
+const PHONE_DETAIL =
+	'Zm7.052 17.03c-.297.836-1.47 1.53-2.417 1.73-.643.135-1.483.243-4.31-.926-3.616-1.494-5.945-5.163-6.128-5.402-.176-.24-1.472-1.96-1.472-3.738 0-1.777.933-2.65 1.264-3.014.297-.325.663-.406.884-.406.221 0 .441.002.634.012.204.01.478-.077.747.57.297.713.884 2.316.96 2.485.078.169.13.365.026.585-.1.22-.156.357-.31.55-.156.194-.328.433-.469.582-.156.169-.32.352-.137.688.183.336.812 1.343 1.744 2.176 1.198 1.07 2.208 1.4 2.545 1.56.336.16.533.135.73-.08.196-.216.833-.972 1.055-1.306.222-.335.446-.28.75-.168.305.11 1.93.912 2.261 1.078.331.166.552.248.632.386.08.14.08.804-.216 1.639Z';
+---
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" class={className}>
+	<path d={detailed ? BUBBLE + PHONE_DETAIL : BUBBLE} />
+</svg>

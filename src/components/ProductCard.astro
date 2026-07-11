@@ -1,0 +1,31 @@
+---
+import type { Product } from '../types/product';
+
+interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+---
+
+<button
+	type="button"
+	class="producto-card group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl shadow-lg outline-offset-4 transition-shadow hover:shadow-2xl"
+	data-product={product.id}
+	data-name={product.name}
+	data-info={product.info}
+	data-message={product.message}
+	aria-label={`Ver ${product.name}`}
+>
+	<img
+		src={product.image}
+		alt={product.name}
+		loading="lazy"
+		class="producto-img h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+		data-flip-id={product.id}
+	/>
+	<span class="pointer-events-none absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-brand-900/90 to-transparent px-4 pb-3 pt-10">
+		<span class="text-left text-base font-extrabold text-cream-50 sm:text-lg">{product.name}</span>
+		<span aria-hidden="true" class="producto-hint flex size-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-lg font-black text-brand-900">+</span>
+	</span>
+</button>
