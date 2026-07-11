@@ -78,13 +78,12 @@ const checkItems = ['Responsabilidad', 'Confianza', 'Compromiso', 'Don de servic
 </section>
 
 <style>
+	/* transform is GSAP-owned (entrance + hover lift): a CSS transition on it
+	   would fight the tween and leave cards stuck mid-flight. */
 	.caracteristica-block {
-		transition:
-			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-			box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+		transition: box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 	.caracteristica-block:hover {
-		transform: translateY(-6px);
 		box-shadow: 0 22px 40px -18px rgb(0 0 0 / 0.45);
 	}
 </style>
@@ -92,6 +91,7 @@ const checkItems = ['Responsabilidad', 'Confianza', 'Compromiso', 'Don de servic
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { initCardHoverLift } from '../lib/cardHoverLift';
 
 	gsap.registerPlugin(ScrollTrigger);
 
@@ -145,13 +145,9 @@ const checkItems = ['Responsabilidad', 'Confianza', 'Compromiso', 'Don de servic
 			);
 		});
 
-		// Icon chips wiggle on card hover — a small alive touch.
-		gsap.utils.toArray<HTMLElement>('.caracteristica-block').forEach((card) => {
-			const icon = card.querySelector('.caracteristica-icon, .caracteristica-logo');
-			if (!icon) return;
-			card.addEventListener('mouseenter', () => {
-				gsap.fromTo(icon, { rotation: 0 }, { rotation: 10, yoyo: true, repeat: 3, duration: 0.12, ease: 'sine.inOut', overwrite: 'auto' });
-			});
+		initCardHoverLift(gsap.utils.toArray<HTMLElement>('.caracteristica-block'), {
+			liftY: -6,
+			iconSelector: '.caracteristica-icon, .caracteristica-logo',
 		});
 
 		return () => {};

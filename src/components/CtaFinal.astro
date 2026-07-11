@@ -1,10 +1,11 @@
 ---
 import { WHATSAPP_URL } from '../lib/contact';
+import WhatsAppIcon from './icons/WhatsAppIcon.astro';
 ---
 
-<section id="final" class="relative overflow-hidden bg-gradient-to-br from-brand-800 via-brand-700 to-brand-900 text-cream-50">
+<section id="final" class="relative overflow-hidden bg-linear-to-br from-brand-800 via-brand-700 to-brand-900 text-cream-50">
 	<div class="pointer-events-none absolute inset-0" aria-hidden="true">
-		<span class="cta-glow absolute left-1/2 top-1/2 size-[28rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400/10 blur-3xl"></span>
+		<span class="cta-glow absolute left-1/2 top-1/2 size-112 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400/10 blur-3xl"></span>
 	</div>
 
 	<div class="cta-final-content relative mx-auto flex max-w-4xl flex-col items-center gap-6 px-4 py-24 text-center sm:py-32">
@@ -23,9 +24,7 @@ import { WHATSAPP_URL } from '../lib/contact';
 				class="cta-magnet-btn inline-flex items-center gap-3 rounded-full bg-gold-500 px-10 py-5 text-xl font-extrabold text-brand-900 shadow-2xl will-change-transform hover:bg-gold-600"
 			>
 				<span class="cta-magnet-label inline-flex items-center gap-3">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="currentColor" class="size-7">
-						<path d="M16.004 3C9.377 3 4 8.377 4 15.004c0 2.523.703 4.883 1.921 6.898L4 29l7.264-1.9a11.94 11.94 0 0 0 4.74.973h.001c6.626 0 12.003-5.377 12.003-12.004C28.008 8.377 22.63 3 16.004 3Z" />
-					</svg>
+					<WhatsAppIcon class="size-7" />
 					¡Realiza tu Pedido!
 				</span>
 			</a>
@@ -36,6 +35,7 @@ import { WHATSAPP_URL } from '../lib/contact';
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	import { initMagneticButton } from '../lib/magneticButton';
 
 	gsap.registerPlugin(ScrollTrigger);
 
@@ -82,22 +82,11 @@ import { WHATSAPP_URL } from '../lib/contact';
 			// Magnetic button (desktop pointers only): the button leans toward
 			// the cursor inside the zone and springs back elastically on leave.
 			if (!reduceMotion && canHover) {
-				const zone = document.querySelector<HTMLElement>('.cta-magnet-zone')!;
-				const btn = document.querySelector<HTMLElement>('.cta-magnet-btn')!;
-				const label = document.querySelector<HTMLElement>('.cta-magnet-label')!;
-
-				zone.addEventListener('mousemove', (e) => {
-					const r = zone.getBoundingClientRect();
-					const relX = e.clientX - r.left - r.width / 2;
-					const relY = e.clientY - r.top - r.height / 2;
-					gsap.to(btn, { x: relX * 0.45, y: relY * 0.45, duration: 0.4, ease: 'power2.out', overwrite: 'auto' });
-					// The label chases a bit further for a layered, liquid feel.
-					gsap.to(label, { x: relX * 0.18, y: relY * 0.18, duration: 0.5, ease: 'power2.out', overwrite: 'auto' });
-				});
-
-				zone.addEventListener('mouseleave', () => {
-					gsap.to([btn, label], { x: 0, y: 0, duration: 1, ease: 'elastic.out(1, 0.35)', overwrite: 'auto' });
-				});
+				initMagneticButton(
+					document.querySelector<HTMLElement>('.cta-magnet-zone')!,
+					document.querySelector<HTMLElement>('.cta-magnet-btn')!,
+					document.querySelector<HTMLElement>('.cta-magnet-label')
+				);
 			}
 
 			return () => {};
