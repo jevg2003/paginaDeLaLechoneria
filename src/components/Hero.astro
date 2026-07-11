@@ -1,31 +1,9 @@
 ---
-import { Image } from 'astro:assets';
-import cajasImg from '../assets/images/racion-cojin-hero-hd.webp';
-import lechonaAbierta from '../assets/images/lechona-abierta-cutout.png';
-import pernil from '../assets/images/pernil-cutout.png';
-import lechonaMixta from '../assets/images/lechona-mixta-cutout.png';
-import cojin from '../assets/images/cojin-cutout.png';
-import cerditoCuero from '../assets/images/pendiente-decorativo-cerdo-cuero.png';
-
-const rotationImages = [
-	{ src: lechonaAbierta, alt: 'Lechona abierta, Chancho el Lechón', framed: false, zoom: 1.25 },
-	{ src: lechonaMixta, alt: 'Lechona mixta, Chancho el Lechón', framed: false, zoom: 1 },
-	{ src: cojin, alt: 'Cojín de lechona, Chancho el Lechón', framed: false, zoom: 1.3 },
-	{ src: pernil, alt: 'Pernil de lechona, Chancho el Lechón', framed: false, zoom: 1.15 },
-	{ src: cerditoCuero, alt: 'Chancho el Lechón', framed: false, zoom: 1.1 },
-	{ src: cajasImg, alt: 'Cajas de lechona listas para entrega, Chancho el Lechón', framed: true, zoom: 1 },
-];
+import HeroLoader from './HeroLoader.astro';
+import HeroCutoutStack from './HeroCutoutStack.astro';
 ---
 
-<div id="hero-loader" class="fixed inset-0 z-[80] flex flex-col items-center justify-center gap-5 bg-brand-600">
-	<img src="/media/logoChanchoLechon3.webp" alt="" class="hero-loader-logo h-28 w-auto drop-shadow-xl" />
-	<div class="flex gap-2" aria-hidden="true">
-		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
-		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
-		<span class="hero-loader-dot size-3 rounded-full bg-gold-400"></span>
-	</div>
-	<span class="sr-only">Cargando…</span>
-</div>
+<HeroLoader />
 
 <section id="hero" class="hero-section relative isolate min-h-screen overflow-hidden bg-brand-600 text-cream-50">
 	<div class="hero-particles pointer-events-none absolute inset-0" aria-hidden="true">
@@ -62,39 +40,17 @@ const rotationImages = [
 				<span>Desde<br />2019</span>
 			</div>
 
-			<div class="hero-pedestal relative h-56 w-[20rem] sm:h-72 sm:w-[30rem] lg:h-80 lg:w-[38rem]">
-				<div class="hero-pedestal-surface absolute inset-x-8 bottom-0 h-2/3 rounded-[50%] bg-gradient-to-b from-brand-700 to-brand-800 shadow-2xl sm:inset-x-16"></div>
-
-				<div class="hero-cutout-stack absolute inset-0">
-					{
-						rotationImages.map((img, i) => (
-							<Image
-								src={img.src}
-								alt={img.alt}
-								class={
-									img.framed
-										? 'hero-cutout absolute inset-x-8 top-0 bottom-4 mx-auto h-auto max-h-full w-auto rounded-[2rem] object-cover opacity-0 shadow-2xl ring-2 ring-gold-400/40'
-										: 'hero-cutout absolute inset-0 h-full w-full object-contain opacity-0 drop-shadow-2xl'
-								}
-								data-cutout-index={i}
-								data-zoom={img.zoom}
-								widths={[400, 640, 900]}
-								sizes="(min-width: 1024px) 608px, 480px"
-								format="webp"
-								loading={i === 0 ? 'eager' : 'lazy'}
-								fetchpriority={i === 0 ? 'high' : undefined}
-							/>
-						))
-					}
-				</div>
-			</div>
+			<HeroCutoutStack />
 		</div>
 
-		<a href="#final" class="hero-cta mt-1">
-			<button class="cursor-pointer rounded-full bg-gold-500 px-8 py-4 text-lg font-bold text-brand-900 shadow-lg transition-transform hover:scale-105 hover:bg-gold-600">
-				¡Realiza tu Pedido!
-			</button>
-		</a>
+		<div class="hero-cta-zone mt-1 -m-4 p-4">
+			<a
+				href="#final"
+				class="hero-cta-btn inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-4 text-lg font-bold text-brand-900 shadow-lg will-change-transform hover:bg-gold-600"
+			>
+				<span class="hero-cta-label">¡Realiza tu Pedido!</span>
+			</a>
+		</div>
 	</div>
 
 	<button
@@ -127,194 +83,49 @@ const rotationImages = [
 <script>
 	import gsap from 'gsap';
 	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-	import { Draggable } from 'gsap/Draggable';
-	import { InertiaPlugin } from 'gsap/InertiaPlugin';
+	import { initHeroLoader } from '../lib/heroLoader';
+	import { HeroCarousel } from '../lib/heroCarousel';
+	import { initHeroAmbientMotion } from '../lib/heroAmbientMotion';
+	import { initMagneticButton } from '../lib/magneticButton';
 
-	gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin);
+	gsap.registerPlugin(ScrollTrigger);
 
 	const mm = gsap.matchMedia();
-
-	const cutouts = gsap.utils.toArray<HTMLElement>('.hero-cutout');
-	const ROTATION_INTERVAL = 4;
-
-	// --- Page loader: covers the hero until assets are ready so half-loaded
-	// cutouts never flash stacked in the middle. Falls back after 3.5s.
-	const loader = document.getElementById('hero-loader');
-	const loaderDots = gsap.to('.hero-loader-dot', {
-		y: -10,
-		duration: 0.4,
-		yoyo: true,
-		repeat: -1,
-		stagger: 0.12,
-		ease: 'sine.inOut',
-	});
-	const loaderPulse = gsap.to('.hero-loader-logo', {
-		scale: 1.08,
-		duration: 0.8,
-		yoyo: true,
-		repeat: -1,
-		ease: 'sine.inOut',
-	});
-
-	let pageReady = false;
-	const readyCallbacks: Array<() => void> = [];
-	function whenReady(cb: () => void) {
-		pageReady ? cb() : readyCallbacks.push(cb);
-	}
-	function finishLoading() {
-		if (pageReady) return;
-		pageReady = true;
-		loaderDots.kill();
-		loaderPulse.kill();
-		gsap.to(loader, {
-			autoAlpha: 0,
-			scale: 1.06,
-			duration: 0.45,
-			ease: 'power2.inOut',
-			onComplete: () => loader?.remove(),
-		});
-		readyCallbacks.forEach((cb) => cb());
-	}
-	if (document.readyState === 'complete') {
-		finishLoading();
-	} else {
-		window.addEventListener('load', finishLoading);
-		setTimeout(finishLoading, 3500);
-	}
-
-	let currentIndex = 0;
-	let rotationTimer: gsap.core.Tween | null = null;
-	let manuallyPaused = false;
-	let hoverPaused = false;
-	let offscreen = false;
-	const isPaused = () => manuallyPaused || hoverPaused || offscreen || document.hidden;
-
-	// Carousel slots relative to the active image: center stage, dimmed
-	// side previews, and a hidden "backstage" slot new images emerge from.
-	const SLOTS = {
-		center: { xPercent: 0, scale: 1, autoAlpha: 1, zIndex: 30 },
-		right: { xPercent: 74, scale: 0.4, autoAlpha: 0.35, zIndex: 10 },
-		left: { xPercent: -74, scale: 0.4, autoAlpha: 0.35, zIndex: 10 },
-		back: { xPercent: 0, scale: 0.3, autoAlpha: 0, zIndex: 0 },
-	};
-
-	function slotFor(i: number, active: number) {
-		const n = cutouts.length;
-		const rel = (i - active + n) % n;
-		if (rel === 0) return SLOTS.center;
-		if (rel === 1) return SLOTS.right;
-		if (rel === n - 1) return SLOTS.left;
-		return SLOTS.back;
-	}
-
-	function layout(active: number, duration: number, ease: string) {
-		cutouts.forEach((el, i) => {
-			const slot = slotFor(i, active);
-			const zoom = parseFloat(el.dataset.zoom || '1');
-			gsap.to(el, { ...slot, scale: slot.scale * zoom, duration, ease, overwrite: 'auto' });
-		});
-		currentIndex = active;
-	}
-
-	function startRotation(duration: number, ease: string) {
-		rotationTimer?.kill();
-		layout(currentIndex, 0, 'none');
-		rotationTimer = gsap.to(
-			{},
-			{
-				duration: ROTATION_INTERVAL,
-				repeat: -1,
-				onRepeat: () => {
-					if (isPaused() || cutouts.length < 2) return;
-					layout((currentIndex + 1) % cutouts.length, duration, ease);
-				},
-			}
-		);
-	}
-
-	// Pause control (WCAG 2.2.2) — works regardless of reduced-motion branch.
-	const toggleBtn = document.getElementById('hero-rotation-toggle');
-	const iconPause = document.querySelector('.hero-icon-pause');
-	const iconPlay = document.querySelector('.hero-icon-play');
-
-	toggleBtn?.addEventListener('click', () => {
-		manuallyPaused = !manuallyPaused;
-		toggleBtn.setAttribute('aria-pressed', String(manuallyPaused));
-		toggleBtn.setAttribute(
-			'aria-label',
-			manuallyPaused ? 'Reanudar rotación automática de imágenes' : 'Pausar rotación automática de imágenes'
-		);
-		iconPause?.classList.toggle('hidden', manuallyPaused);
-		iconPlay?.classList.toggle('hidden', !manuallyPaused);
-	});
-
-	// Swipe / drag to advance the carousel manually (mouse or touch).
-	const stack = document.querySelector<HTMLElement>('.hero-cutout-stack');
-	if (stack) {
-		stack.style.touchAction = 'pan-y';
-		stack.style.cursor = 'grab';
-		stack.style.userSelect = 'none';
-		// Native image dragging swallows the pointerup that ends our swipe.
-		stack.addEventListener('dragstart', (e) => e.preventDefault());
-		let dragStartX: number | null = null;
-
-		stack.addEventListener('pointerdown', (e) => {
-			dragStartX = e.clientX;
-		});
-		window.addEventListener('pointerup', (e) => {
-			if (dragStartX === null) return;
-			const dx = e.clientX - dragStartX;
-			dragStartX = null;
-			if (Math.abs(dx) < 40 || cutouts.length < 2) return;
-			const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			const n = cutouts.length;
-			const next = dx < 0 ? (currentIndex + 1) % n : (currentIndex - 1 + n) % n;
-			layout(next, reduce ? 0.15 : 0.6, reduce ? 'none' : 'power2.out');
-			// Restart the auto-rotation clock so the manual pick gets full stage time.
-			rotationTimer?.restart(true);
-		});
-	}
-
-	const pedestalWrap = document.querySelector('.hero-pedestal-wrap');
-	pedestalWrap?.addEventListener('mouseenter', () => {
-		hoverPaused = true;
-	});
-	pedestalWrap?.addEventListener('mouseleave', () => {
-		hoverPaused = false;
-	});
-	pedestalWrap?.addEventListener('focusin', () => {
-		hoverPaused = true;
-	});
-	pedestalWrap?.addEventListener('focusout', () => {
-		hoverPaused = false;
-	});
+	const { whenReady } = initHeroLoader();
+	const carousel = new HeroCarousel();
 
 	mm.add(
 		{
 			reduceMotion: '(prefers-reduced-motion: reduce)',
 			okMotion: '(prefers-reduced-motion: no-preference)',
+			isMobile: '(max-width: 767px)',
+			isDesktop: '(min-width: 768px)',
+			canHover: '(hover: hover) and (pointer: fine)',
 		},
 		(context) => {
-			const { reduceMotion } = context.conditions as { reduceMotion: boolean };
+			const { reduceMotion, isMobile, canHover } = context.conditions as {
+				reduceMotion: boolean;
+				isMobile: boolean;
+				canHover: boolean;
+			};
 
-			currentIndex = 0;
-			layout(0, 0, 'none');
+			carousel.layout(0, 0, 'none');
 
 			if (reduceMotion) {
 				// Rotation MUST keep advancing through all 4 images under reduced
 				// motion — only the crossfade tween itself is simplified to an
 				// instant/short opacity swap (no transform/slide/scale).
-				gsap.set('.hero-logo, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
+				gsap.set('.hero-logo, .hero-title-line, .hero-cta-zone, .hero-badge, .hero-scroll-indicator', {
 					autoAlpha: 0,
 				});
-				gsap.to('.hero-logo, .hero-title-line, .hero-cta, .hero-badge, .hero-scroll-indicator', {
+				gsap.to('.hero-logo, .hero-title-line, .hero-cta-zone, .hero-badge, .hero-scroll-indicator', {
 					autoAlpha: 1,
 					duration: 0.7,
 					stagger: 0.15,
 					ease: 'power1.out',
 				});
 				gsap.set('.hero-particles', { autoAlpha: 1 });
-				startRotation(0.15, 'none');
+				carousel.startRotation(0.15, 'none');
 
 				// Gentle continuous ambient motion (opacity-only, no transform/parallax)
 				// so there's always something visibly alive, not just a one-time fade.
@@ -326,158 +137,91 @@ const rotationImages = [
 					ease: 'sine.inOut',
 				});
 
-				return () => {
-					rotationTimer?.kill();
-				};
+				return () => carousel.destroy();
 			}
 
-			// Entrance timeline — plays once the loader clears, never over it.
-			// Hide everything up front so nothing flashes while waiting.
-			gsap.set('.hero-logo, .hero-title-line, .hero-pedestal-wrap, .hero-badge, .hero-cta', { autoAlpha: 0 });
-			const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, paused: true, delay: 0.15 });
+			playEntranceTimeline();
+			carousel.startRotation(0.8, 'power2.inOut');
+			initHeroAmbientMotion((offscreen) => carousel.setOffscreen(offscreen));
 
-			// Refined reveal: the logo resolves out of a soft blur while the
-			// name slides in beside it, line by line.
-			tl.fromTo(
-				'.hero-logo',
-				{ autoAlpha: 0, x: -50, scale: 0.85, filter: 'blur(12px)' },
-				{ autoAlpha: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out' }
-			)
-				.fromTo(
-					'.hero-title-line',
-					{ autoAlpha: 0, x: 60 },
-					{ autoAlpha: 1, x: 0, duration: 0.9, stagger: 0.14, ease: 'power4.out' },
-					'-=0.75'
-				)
-				.fromTo(
-					'.hero-pedestal-wrap',
-					{ autoAlpha: 0, y: 40, scale: 0.9 },
-					{ autoAlpha: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.6)' },
-					'-=0.4'
-				)
-				.fromTo(
-					'.hero-badge',
-					{ autoAlpha: 0, scale: 0.5, rotation: -20 },
-					{ autoAlpha: 1, scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.9)' },
-					'-=0.4'
-				)
-				.fromTo(
-					'.hero-cta',
-					{ autoAlpha: 0, y: 30, scale: 0.7 },
-					{ autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.9)' },
-					'-=0.3'
+			// Same magnetic pull as the closing CTA's WhatsApp button.
+			if (canHover) {
+				initMagneticButton(
+					document.querySelector<HTMLElement>('.hero-cta-zone')!,
+					document.querySelector<HTMLElement>('.hero-cta-btn')!,
+					document.querySelector<HTMLElement>('.hero-cta-label')
 				);
-
-			whenReady(() => tl.play());
-
-			startRotation(0.8, 'power2.inOut');
-
-			const ambient: gsap.core.Tween[] = [];
-
-			// Ambient badge float
-			const badgeFloat = gsap.to('.hero-badge', {
-				y: '+=8',
-				rotation: 4,
-				duration: 2.4,
-				yoyo: true,
-				repeat: -1,
-				ease: 'sine.inOut',
-				delay: 2.2,
-			});
-			ambient.push(badgeFloat);
-
-			// The badge is a toy: grab it, throw it around the hero, and it
-			// lands with a springy bounce.
-			Draggable.create('.hero-badge', {
-				type: 'x,y',
-				bounds: '.hero-section',
-				inertia: true,
-				edgeResistance: 0.75,
-				onPress() {
-					badgeFloat.kill();
-					gsap.to(this.target, { scale: 1.15, duration: 0.2, ease: 'power2.out', overwrite: 'auto' });
-				},
-				onRelease() {
-					gsap.to(this.target, { scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.35)' });
-				},
-				onThrowComplete() {
-					gsap.fromTo(
-						this.target,
-						{ scaleX: 1.25, scaleY: 0.8 },
-						{ scaleX: 1, scaleY: 1, duration: 0.7, ease: 'elastic.out(1, 0.3)' }
-					);
-				},
-			});
-
-			// Ambient particle drift (steam/spice feel)
-			gsap.utils.toArray<HTMLElement>('.hero-particle').forEach((particle, i) => {
-				ambient.push(
-					gsap.to(particle, {
-						y: '+=18',
-						x: i % 2 === 0 ? '+=10' : '-=10',
-						opacity: 0.6,
-						duration: 3 + i * 0.6,
-						yoyo: true,
-						repeat: -1,
-						ease: 'sine.inOut',
-						delay: i * 0.4,
-					})
-				);
-			});
-
-			ambient.push(
-				gsap.to('.hero-glow', {
-					scale: 1.3,
-					opacity: 0.55,
-					duration: 3,
-					yoyo: true,
-					repeat: -1,
-					ease: 'sine.inOut',
-				})
-			);
-
-			// Pause everything the moment the hero leaves the viewport so the
-			// browser isn't animating things nobody can see.
-			ScrollTrigger.create({
-				trigger: '#hero',
-				start: 'top bottom',
-				end: 'bottom top',
-				onToggle: (self) => {
-					offscreen = !self.isActive;
-					ambient.forEach((t) => (self.isActive ? t.play() : t.pause()));
-				},
-			});
+			}
 
 			// Second pin+scrub: Hero exit transition into the next section.
-			// Disabled below the mobile breakpoint to avoid stacking two
-			// consecutive scroll-jacked pins (Hero-exit + Proceso) on small
-			// screens/low-power devices.
-			const isMobile = window.matchMedia('(max-width: 767px)').matches;
+			// Disabled below the mobile breakpoint (matchMedia condition, so it
+			// rebuilds correctly when the viewport crosses 768px) to avoid two
+			// consecutive scroll-jacked pins on small screens.
+			if (!isMobile) initExitTransition();
 
-			if (!isMobile) {
-				gsap.timeline({
-					scrollTrigger: {
-						trigger: '#hero',
-						start: 'top top',
-						end: '+=800',
-						pin: true,
-						scrub: true,
-					},
-				})
-					.to('.hero-pedestal-wrap', { scale: 0.75, y: -30, duration: 1, ease: 'none' }, 0)
-					.to(
-						// The badge is deliberately NOT in this list: exit-fading it
-						// fought its float/drag tweens and could leave it invisible
-						// after scrolling back or reloading mid-page.
-						'.hero-title, .hero-logo-wrap, .hero-cta, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
-						{ autoAlpha: 0, y: -60, duration: 0.8, ease: 'none' },
-						0
-					);
-			}
-
-			return () => {
-				rotationTimer?.kill();
-			};
+			return () => carousel.destroy();
 		}
 	);
+
+	/** Refined reveal: the logo resolves out of a soft blur while the name
+	 * slides in beside it, line by line. Plays once the loader clears. */
+	function playEntranceTimeline() {
+		gsap.set('.hero-logo, .hero-title-line, .hero-pedestal-wrap, .hero-badge, .hero-cta-zone', { autoAlpha: 0 });
+		const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, paused: true, delay: 0.15 });
+
+		tl.fromTo(
+			'.hero-logo',
+			{ autoAlpha: 0, x: -50, scale: 0.85, filter: 'blur(12px)' },
+			{ autoAlpha: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 1.1, ease: 'power3.out' }
+		)
+			.fromTo(
+				'.hero-title-line',
+				{ autoAlpha: 0, x: 60 },
+				{ autoAlpha: 1, x: 0, duration: 0.9, stagger: 0.14, ease: 'power4.out' },
+				'-=0.75'
+			)
+			.fromTo(
+				'.hero-pedestal-wrap',
+				{ autoAlpha: 0, y: 40, scale: 0.9 },
+				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.8, ease: 'back.out(1.6)' },
+				'-=0.4'
+			)
+			.fromTo(
+				'.hero-badge',
+				{ autoAlpha: 0, scale: 0.5, rotation: -20 },
+				{ autoAlpha: 1, scale: 1, rotation: 0, duration: 0.6, ease: 'back.out(1.9)' },
+				'-=0.4'
+			)
+			.fromTo(
+				'.hero-cta-zone',
+				{ autoAlpha: 0, y: 30, scale: 0.7 },
+				{ autoAlpha: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(1.9)' },
+				'-=0.3'
+			);
+
+		whenReady(() => tl.play());
+	}
+
+	function initExitTransition() {
+		// fromTo (not to): the entrance timeline is deferred behind the page
+		// loader (whenReady), so at the moment this scrub timeline is created
+		// hero-cta/title/etc are often still at their hidden autoAlpha:0 initial
+		// state. A plain .to() would capture THAT as its "from" value and the
+		// button would never come back after scrolling back up. Explicit `from`
+		// values make the exit tween independent of the entrance's timing.
+		gsap
+			.timeline({
+				scrollTrigger: { trigger: '#hero', start: 'top top', end: '+=800', pin: true, scrub: true },
+			})
+			.to('.hero-pedestal-wrap', { scale: 0.75, y: -30, duration: 1, ease: 'none' }, 0)
+			.fromTo(
+				// The badge is deliberately NOT in this list: exit-fading it
+				// fought its float/drag tweens and could leave it invisible
+				// after scrolling back or reloading mid-page.
+				'.hero-title, .hero-logo-wrap, .hero-cta-zone, .hero-rotation-toggle, .hero-scroll-indicator, .hero-particles',
+				{ autoAlpha: 1, y: 0 },
+				{ autoAlpha: 0, y: -60, duration: 0.8, ease: 'none' },
+				0
+			);
+	}
 </script>
