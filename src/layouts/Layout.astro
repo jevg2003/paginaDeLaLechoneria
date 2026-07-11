@@ -1,25 +1,88 @@
 ---
 import '../styles/global.css';
+import {
+	SITE_URL,
+	SITE_TITLE,
+	SITE_DESCRIPTION,
+	SITE_KEYWORDS,
+	BUSINESS_NAME,
+	OG_IMAGE_PATH,
+	OG_IMAGE_ALT,
+	GOOGLE_SITE_VERIFICATION,
+} from '../lib/siteMeta';
+import { buildLocalBusinessSchema, buildBreadcrumbSchema, buildWebsiteSchema } from '../lib/structuredData';
 
 interface Props {
 	title?: string;
 	description?: string;
 }
 
-const {
-	title = 'Lechonería Chancho el Lechón | Restaurante Cali',
-	description = 'La mejor lechona de Cali: lechona tolimense, cojines, tamales y pernil con cuero súper crocante. Barrio 7 de Agosto — pedidos y cotizaciones por WhatsApp.',
-} = Astro.props;
+const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, SITE_URL).toString();
+const ogImageURL = new URL(OG_IMAGE_PATH, SITE_URL).toString();
+
+const localBusinessSchema = buildLocalBusinessSchema();
+const breadcrumbSchema = buildBreadcrumbSchema();
+const websiteSchema = buildWebsiteSchema();
 ---
 
 <html lang="es">
 	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/webp" href="/favicon.webp" />
+		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
+
+		<!-- SEO on-page -->
 		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="keywords" content={SITE_KEYWORDS} />
+		<meta name="author" content={BUSINESS_NAME} />
+		<meta name="robots" content="index, follow" />
+		<meta name="theme-color" content="#004aad" />
+		<link rel="canonical" href={canonicalURL} />
+
+		<!-- Open Graph (Facebook, WhatsApp link previews, LinkedIn) -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={ogImageURL} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={OG_IMAGE_ALT} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={BUSINESS_NAME} />
+		<meta property="og:locale" content="es_CO" />
+
+		<!-- Twitter / X Cards -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageURL} />
+		<meta name="twitter:image:alt" content={OG_IMAGE_ALT} />
+
+		<!-- Structured data (Schema.org) -->
+		<script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+		<script type="application/ld+json" set:html={JSON.stringify(websiteSchema)} />
+
+		<!-- Favicons and app icons -->
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+
+		<!-- Sitemap -->
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- Performance hints -->
+		<link rel="preconnect" href="https://www.google.com" />
+		<link rel="dns-prefetch" href="https://wa.me" />
+		<link rel="preload" as="image" href="/media/logoChanchoLechon3.webp" />
+
+		{GOOGLE_SITE_VERIFICATION && <meta name="google-site-verification" content={GOOGLE_SITE_VERIFICATION} />}
 	</head>
 	<body>
 		<slot />
