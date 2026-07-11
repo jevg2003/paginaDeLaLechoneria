@@ -1,54 +1,88 @@
-# 🐷 Página de la Lechonería - "Chancho el Lechón"
+<div align="center">
 
-[![Estado del proyecto](https://img.shields.io/badge/estado-en_desarrollo-yellow)](https://github.com/jevg2003/paginaDeLaLechoneria)
-[![Última versión](https://img.shields.io/github/v/tag/jevg2003/paginaDeLaLechoneria)](https://github.com/jevg2003/paginaDeLaLechoneria/tags)
-[![Página desplegada](https://img.shields.io/badge/demo-disponible-brightgreen)](https://jevg2003.github.io/paginaDeLaLechoneria/)
-[![Estado del servidor](https://img.shields.io/website?down_message=offline&up_message=online&url=https%3A%2F%2Fjevg2003.github.io%2FpaginaDeLaLechoneria)](https://jevg2003.github.io/paginaDeLaLechoneria/)
+<img src="public/media/logoChanchoLechon3.webp" alt="Logo Lechonería Chancho el Lechón" width="120" />
 
-<p align="center">
-  <img src="https://github.com/jevg2003/paginaDeLaLechoneria/blob/main/css/media/logo.webp" alt="Logo de la Lechonería" width="200px">
-</p>
+# 🐷 Lechonería Chancho el Lechón
 
-Bienvenido a la página oficial de **"Chancho el Lechón"**, una lechonería ubicada en Cali, Colombia, especializada en deleitar a sus clientes con las mejores lechonas y platos típicos. 🌟 Esta landing page tiene como objetivo promover el negocio y compartir información importante de manera atractiva y accesible.
+**Landing page inmersiva para un restaurante de lechona tradicional en Cali, Colombia.**
 
-## 🚀 Funcionalidades principales
+[![Sitio en vivo](https://img.shields.io/badge/sitio-en_vivo-brightgreen?style=flat-square)](https://pagina-de-la-lechoneria.vercel.app/)
+[![Astro](https://img.shields.io/badge/Astro-7-BC52EE?style=flat-square&logo=astro&logoColor=white)](https://astro.build)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![GSAP](https://img.shields.io/badge/GSAP-3-88CE02?style=flat-square&logo=greensock&logoColor=white)](https://gsap.com)
+[![Deploy](https://img.shields.io/badge/deploy-Vercel-black?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com)
+[![Licencia MIT](https://img.shields.io/badge/licencia-MIT-blue?style=flat-square)](LICENSE)
 
-- **Promoción**: Mostrar la calidad y variedad de los productos ofrecidos.
-- **Diseño atractivo**: Adaptado para capturar la atención de los clientes.
-- **Accesibilidad**: Compatible con distintos dispositivos y navegadores.
+[🌐 Ver sitio](https://pagina-de-la-lechoneria.vercel.app/) · [🐛 Reportar un problema](../../issues)
 
-## 🛠️ Tecnologías utilizadas
+</div>
 
-[![HTML5](https://img.shields.io/badge/HTML5-%23E34F26.svg?&style=flat-square&logo=html5&logoColor=white)](https://developer.mozilla.org/es/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-%231572B6.svg?&style=flat-square&logo=css3&logoColor=white)](https://developer.mozilla.org/es/docs/Web/CSS)
-[![SASS](https://img.shields.io/badge/SASS-%23CC6699.svg?&style=flat-square&logo=sass&logoColor=white)](https://sass-lang.com/)
-[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-%23327FC7.svg?&style=flat-square&logo=github&logoColor=white)](https://pages.github.com/)
+---
 
-## 🌐 Acceso a la página
+## Sobre el proyecto
 
-Haz clic aquí para explorar la página en vivo: [Página oficial de "Chancho el Lechón"](https://jevg2003.github.io/paginaDeLaLechoneria/)
+Sitio web para **Lechonería Chancho el Lechón**, negocio caleño (Barrio 7 de Agosto) especializado en lechona tolimense, cojines, tamales y pernil. El objetivo del sitio es generar pedidos y cotizaciones directamente por WhatsApp, con una experiencia de scroll cuidada de principio a fin — nada de la típica landing "navbar → hero → secciones → footer".
 
-## 📝 Cómo contribuir
+## ✨ Características
 
-1. Haz un fork del repositorio.
-2. Clona el repositorio en tu máquina local:
-   ```bash
-   git clone https://github.com/tu-usuario/paginaDeLaLechoneria.git
-   ```
-3. Crea una nueva rama para tu funcionalidad:
-   ```bash
-   git switch -c feature/nueva-funcionalidad
-   ```
-4. Realiza los cambios necesarios y guárdalos en un commit:
-   ```bash
-   git add .
-   git commit -m "Descripción del cambio"
-   ```
-5. Haz un push de la rama al repositorio remoto:
-   ```bash
-   git push origin feature/nueva-funcionalidad
-   ```
-6. Crea un pull request desde tu rama en GitHub al repositorio principal.
+- **Hero con carrusel interactivo** — fotos de productos que rotan solas, se arrastran con el dedo/mouse, y un badge físico ("Desde 2019") que se agarra y se lanza con inercia real (GSAP Draggable + InertiaPlugin).
+- **Storytelling con scroll horizontal** — Quiénes Somos, Misión y Visión en un recorrido pineado con figuras decorativas que se arrastran, chocan entre sí y cambian de forma (`clip-path`).
+- **Galería tipo bento con zoom cinematográfico** — el scroll acerca la cámara hacia la foto central hasta llenar la pantalla, sin bordes ni cortes, en cualquier tamaño de pantalla.
+- **Modal de productos con transición Flip** — cada producto vuela desde la grilla hasta un panel de detalle con su información y un botón de cotización que abre WhatsApp con un mensaje pre-armado por producto.
+- **Botón de WhatsApp flotante** con animaciones vivas y un tooltip que no estorba.
+- **100% responsive** — verificado en móvil, tablet y desktop, incluyendo el cruce de breakpoints sin recargar la página.
+- **Accesible** — respeta `prefers-reduced-motion` en todas las animaciones, sin congelar contenido.
+- **SEO técnico completo** — Open Graph, Twitter Cards, JSON-LD (`LocalBusiness`/`FoodEstablishment`), sitemap automático, favicons completos y Web App Manifest.
+- **Rendimiento** — Lighthouse 100/100/100/100 en desktop, 91+ en mobile.
+
+## 🛠️ Stack técnico
+
+| Área | Tecnología |
+|---|---|
+| Framework | [Astro 7](https://astro.build) (salida estática) |
+| Componentes interactivos | [React 19](https://react.dev) |
+| Estilos | [Tailwind CSS 4](https://tailwindcss.com) |
+| Animación | [GSAP 3](https://gsap.com) (ScrollTrigger, Draggable, Flip, InertiaPlugin) |
+| Imágenes | [Sharp](https://sharp.pixelplumbing.com) vía `astro:assets` |
+| Hosting | [Vercel](https://vercel.com) |
+
+## 📁 Estructura del proyecto
+
+```
+src/
+├── components/     # Componentes Astro (una sección = un componente)
+│   └── icons/      # Íconos SVG reutilizables
+├── data/           # Fuente única de datos (productos, carrusel del hero)
+├── layouts/        # Layouts de página (Layout.astro, LegalLayout.astro)
+├── lib/            # Lógica GSAP reutilizable (carrusel, físicas, modal, SEO)
+├── pages/          # Rutas del sitio (index, términos, privacidad)
+├── styles/         # Tema global de Tailwind
+└── types/          # Tipos TypeScript compartidos
+public/             # Assets estáticos, favicons, manifest, robots.txt
+scripts/            # Scripts de generación de assets (favicons, OG image)
+```
+
+## 🚀 Desarrollo local
+
+```bash
+# Instalar dependencias
+npm install
+
+# Servidor de desarrollo (http://localhost:4321)
+npm run dev
+
+# Build de producción
+npm run build
+
+# Previsualizar el build de producción
+npm run preview
+```
+
+## 📱 Contacto del negocio
+
+Lechonería Chancho el Lechón — Barrio 7 de Agosto, Diagonal 15 #71A-58, Santiago de Cali.
+Pedidos y cotizaciones: [WhatsApp](https://wa.me/573128839301) · [Instagram](https://www.instagram.com/chanchoellechon/) · [Facebook](https://www.facebook.com/franciaelena.gonzalez)
 
 ## 📄 Licencia
 
@@ -56,4 +90,8 @@ Este proyecto está bajo la [Licencia MIT](LICENSE).
 
 ---
 
-🌟 **"Chancho el Lechón"** - Donde la tradición y el sabor se encuentran. 🐖❤️
+<div align="center">
+
+🐷 **Lechonería Chancho el Lechón** — la del 7 de Agosto, desde 2019.
+
+</div>
